@@ -9,12 +9,12 @@
 
 ## 🧠 About Me
 
-- 💻 I’m currently learning **Fullstack Development**
-- ⚛️ Focus: **React, Tailwind, TypeScript**
-- 🛠 Backend: **Node.js / FastAPI / Flask**
-- 🧩 Interested in: **Web Apps, Blockchain, Automation**
-- 🎯 Goal: Become a strong **Junior Developer**
-- 🚀 Currently: **Co-Founder / Dev at $DARK**
+-  I’m currently learning **Fullstack Development**
+-  Focus: **React, Tailwind, TypeScript**
+-  Backend: **Node.js / FastAPI / Flask**
+-  Interested in: **Web Apps, Blockchain, Automation**
+-  Goal: Become a strong **Junior Developer**
+-  Currently: **Co-Founder / Dev at $DARK**
 
 ---
 
@@ -65,13 +65,6 @@
     <img src="https://img.shields.io/badge/LinkedIn-000?style=for-the-badge&logo=linkedin" />
   </a>
 </p>
-
----
-
-## ⚡ Current Status
-
-> 🚀 Co-Founder & Developer at **$DARK**  
-> Building something experimental in Web3 / blockchain space.
 
 ---
 
