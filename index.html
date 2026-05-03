@@ -2,699 +2,853 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="description" content="thebrainair — Fullstack Developer in progress">
 <title>thebrainair</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#09090b;--surf:#18181b;--bdr:#27272a;--bdh:#52525b;
+  --txt:#fafafa;--mut:#a1a1aa;--dim:#71717a;--dmr:#52525b;
+  --f:'JetBrains Mono','Courier New',monospace;
+}
+html,body{width:100%;height:100%;background:var(--bg);font-family:var(--f);color:var(--txt);overflow:hidden;-webkit-font-smoothing:antialiased}
 
-  :root {
-    --bg: #09090b;
-    --surface: #18181b;
-    --border: #27272a;
-    --border-hover: #52525b;
-    --text: #fafafa;
-    --muted: #a1a1aa;
-    --dim: #71717a;
-    --dimmer: #52525b;
-    --font: 'JetBrains Mono', 'Courier New', monospace;
-  }
+#desktop{
+  position:fixed;inset:0;bottom:44px;overflow:hidden;
+  background:
+    radial-gradient(ellipse 55% 55% at 12% 95%,rgba(39,39,42,.55) 0%,transparent 60%),
+    radial-gradient(ellipse 45% 45% at 88% 8%,rgba(39,39,42,.4) 0%,transparent 60%),
+    #09090b;
+}
+#desktop::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(39,39,42,.5) 1px,transparent 1px),linear-gradient(90deg,rgba(39,39,42,.5) 1px,transparent 1px);
+  background-size:40px 40px;
+}
 
-  html, body {
-    width: 100%; height: 100%;
-    background: var(--bg);
-    font-family: var(--font);
-    color: var(--text);
-    overflow: hidden;
-  }
+/* WINDOWS */
+.win{
+  position:absolute;display:flex;flex-direction:column;
+  background:#09090b;border:1px solid var(--bdr);border-radius:12px;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04),0 30px 80px rgba(0,0,0,.85),0 6px 20px rgba(0,0,0,.6);
+  min-width:260px;min-height:100px;display:none;
+}
+.win.active{
+  z-index:100;
+  box-shadow:0 0 0 1px rgba(255,255,255,.07),0 48px 120px rgba(0,0,0,.9),0 12px 36px rgba(0,0,0,.75);
+}
+.win.open{display:flex}
 
-  /* ── DESKTOP BACKGROUND ── */
-  #desktop {
-    width: 100vw; height: 100vh;
-    position: relative;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(39,39,42,0.4) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(39,39,42,0.3) 0%, transparent 70%),
-      #09090b;
-    overflow: hidden;
-  }
+.tb{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  border-bottom:1px solid var(--bdr);border-radius:12px 12px 0 0;
+  flex-shrink:0;user-select:none;cursor:grab;touch-action:none;
+}
+.tb:active{cursor:grabbing}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;transition:opacity .15s}
+.dot:hover{opacity:.7}
+.dr{background:#ef4444}.dy{background:#eab308}.dg{background:#22c55e}
+.wlabel{font-size:12px;color:var(--dmr);margin-left:4px;letter-spacing:.02em;pointer-events:none}
+.wlabel em{color:var(--mut);font-style:normal}
 
-  #desktop::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(39,39,42,0.5) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(39,39,42,0.5) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-  }
+.wbody{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent;border-radius:0 0 12px 12px}
+.wbody::-webkit-scrollbar{width:4px}
+.wbody::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
 
-  /* ── WINDOWS (Generic) ── */
-  .window {
-    position: absolute;
-    background: #09090b;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    display: flex;
-    flex-direction: column;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.04),
-      0 32px 80px rgba(0,0,0,0.8),
-      0 8px 24px rgba(0,0,0,0.6);
-    user-select: none;
-    will-change: transform, left, top;
-    transition: box-shadow 0.2s;
-  }
+/* TASKBAR */
+#taskbar{
+  position:fixed;bottom:0;left:0;right:0;height:44px;
+  background:rgba(9,9,11,.94);backdrop-filter:blur(20px);
+  border-top:1px solid var(--bdr);
+  display:flex;align-items:center;padding:0 12px;gap:6px;z-index:9999;
+}
+.tbi{
+  display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mut);
+  padding:4px 10px;border:1px solid var(--bdr);border-radius:5px;
+  background:var(--surf);cursor:pointer;
+  transition:border-color .15s,color .15s;font-family:var(--f);white-space:nowrap;user-select:none;
+}
+.tbi:hover{border-color:var(--bdh);color:var(--txt)}
+.tbi.lit{border-color:#3f3f46;color:var(--txt)}
+.tdot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0}
+.tdot.off{background:var(--dmr)}
+.tbplus{
+  display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;border:1px solid var(--bdr);border-radius:5px;
+  background:var(--surf);color:var(--mut);cursor:pointer;font-size:19px;line-height:1;
+  transition:border-color .15s,color .15s;flex-shrink:0;user-select:none;
+}
+.tbplus:hover{border-color:var(--bdh);color:var(--txt)}
+.tbr{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tbclk{font-size:11px;color:var(--dmr)}
 
-  /* Main Window specifics */
-  #window-main {
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(680px, 92vw);
-    max-height: 88vh;
-    z-index: 1;
-  }
+/* PLUS MENU */
+#plusmenu{
+  position:fixed;bottom:52px;left:12px;background:#0e0e11;
+  border:1px solid var(--bdr);border-radius:10px;padding:6px;min-width:200px;
+  z-index:10000;box-shadow:0 8px 32px rgba(0,0,0,.75);
+  display:none;flex-direction:column;gap:2px;
+}
+#plusmenu.open{display:flex}
+.pmi{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:12px;color:var(--mut);transition:background .1s,color .1s;user-select:none}
+.pmi:hover{background:var(--surf);color:var(--txt)}
+.pmi-ico{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.pmi-sep{height:1px;background:var(--bdr);margin:3px 6px}
 
-  .window.dragging {
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.06),
-      0 48px 120px rgba(0,0,0,0.9),
-      0 16px 40px rgba(0,0,0,0.7);
-    cursor: grabbing !important;
-  }
+/* PROFILE */
+.p-inner{padding:22px 24px 26px}
+.section{margin-bottom:22px;opacity:0;transition:opacity .25s}
+.section.vis{opacity:1}
+.divider{border:none;border-top:1px solid var(--bdr);margin:18px 0;opacity:0;transition:opacity .3s}
+.divider.vis{opacity:1}
+.pl{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.ps{color:var(--dmr);font-size:13px;padding-top:1px;flex-shrink:0}
+.ct{color:var(--dmr);font-size:12px}
+.tc{display:inline-block;width:7px;height:13px;background:var(--dmr);vertical-align:text-bottom;margin-left:1px;animation:blink 1s step-end infinite}
+.fc{display:inline-block;width:8px;height:14px;background:var(--txt);vertical-align:text-bottom;margin-left:2px;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.bi{margin-left:16px}
+.hn{font-size:21px;font-weight:700;letter-spacing:-.5px;cursor:pointer}
+.hs{font-size:12px;color:var(--dim);margin-top:4px}
+.br{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.badge{font-size:11px;padding:2px 8px;border:1px solid var(--bdr);border-radius:4px;color:var(--mut);background:var(--surf)}
+.bgr{border-color:#166534;color:#4ade80;background:#052e16}
+.bbl{border-color:#1e3a5f;color:#60a5fa;background:#0c1a2e}
+.bam{border-color:#713f12;color:#fbbf24;background:#1c0f00}
+.ir{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12px;border-bottom:1px solid var(--surf)}
+.ik{color:var(--dmr);min-width:88px;flex-shrink:0}
+.iv{color:#d4d4d8}
+.cg{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;align-items:center;gap:5px;background:var(--surf);border:1px solid var(--bdr);border-radius:5px;padding:4px 9px;font-size:11px;color:var(--mut);transition:border-color .15s;font-family:var(--f)}
+.chip:hover{border-color:var(--bdh)}
+.cd{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.cjs{background:#eab308}.cts{background:#3b82f6}.cpy{background:#22c55e}.cw3{background:#a855f7}.cdb{background:#f97316}.cgr{background:#52525b}
+.tag{font-size:10px;padding:1px 5px;border:1px solid #3f3f46;border-radius:3px;color:var(--dmr);margin-left:2px}
+.lc{display:flex;align-items:center;gap:6px;background:var(--surf);border:1px solid var(--bdr);border-radius:5px;padding:4px 9px;font-size:11px;color:var(--mut);transition:border-color .15s;font-family:var(--f)}
+.lc:hover{border-color:var(--bdh)}
+.lc.dim{opacity:.42}
+.lb{font-size:9px;padding:1px 5px;border-radius:3px;border:1px solid}
+.nat{border-color:#166534;color:#4ade80;background:#052e16}
+.flu{border-color:#1e3a5f;color:#60a5fa;background:#0c1a2e}
+.lrn{border-color:#713f12;color:#fbbf24;background:#1c0f00}
+.beg{border-color:#3f3f46;color:#3f3f46;background:#09090b}
+.lr{display:flex;gap:8px;flex-wrap:wrap}
+.lbtn{display:flex;align-items:center;gap:5px;font-size:11px;padding:5px 12px;border:1px solid var(--bdr);border-radius:5px;background:var(--surf);color:var(--mut);text-decoration:none;font-family:var(--f);transition:border-color .15s,color .15s}
+.lbtn:hover{border-color:var(--bdh);color:var(--txt)}
+.qt{border-left:2px solid var(--bdr);padding:8px 14px;color:var(--dim);font-size:12px;font-style:italic}
+.qt span{color:var(--txt)}
 
-  /* ── TITLEBAR ── */
-  .titlebar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-    cursor: grab;
-    flex-shrink: 0;
-    border-radius: 12px 12px 0 0;
-    background: #09090b;
-  }
+/* PROJECTS */
+.proj-grid{display:flex;flex-direction:column;gap:8px}
+.proj-card{border:1px solid var(--bdr);border-radius:8px;padding:12px 14px;background:var(--surf);transition:border-color .15s;text-decoration:none;display:block}
+.proj-card:hover{border-color:var(--bdh)}
+.proj-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:5px}
+.proj-name{font-size:13px;color:var(--txt);font-weight:500}
+.proj-st{font-size:9px;padding:2px 6px;border-radius:3px;border:1px solid;flex-shrink:0}
+.live{border-color:#166534;color:#4ade80;background:#052e16}
+.proj-desc{font-size:11px;color:var(--dim);margin-bottom:7px;line-height:1.5}
+.proj-tags{display:flex;flex-wrap:wrap;gap:4px}
+.proj-tag{font-size:10px;padding:1px 6px;border:1px solid var(--bdr);border-radius:3px;color:var(--dmr);background:#09090b}
+.proj-url{font-size:10px;color:var(--dmr);margin-top:5px}
 
-  .titlebar:active { cursor: grabbing; }
+/* NEOFETCH */
+.neo-wrap{padding:16px 18px;display:grid;grid-template-columns:auto 1fr;gap:0 20px;align-items:start}
+#neo-art{font-size:8px;line-height:1.2;color:#60a5fa;white-space:pre;font-family:var(--f)}
+.neo-row{font-size:12px;padding:1.5px 0;display:flex}
+.neo-k{color:#60a5fa;font-weight:500;min-width:96px}
+.neo-v{color:var(--mut)}
+.neo-sep{font-size:12px;color:var(--dmr);padding:3px 0}
+.neo-colors{display:flex;gap:4px;margin-top:8px}
+.nc{width:16px;height:16px;border-radius:3px}
 
-  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; transition: filter 0.2s; }
-  .dot.r { background: #ef4444; cursor: pointer; }
-  .dot.r:hover { filter: brightness(1.3); }
-  .dot.y { background: #eab308; }
-  .dot.g { background: #22c55e; }
+/* HTOP */
+.htop-wrap{font-size:11px;line-height:1.6}
+.ht-head{background:#27272a;padding:4px 12px;display:flex;justify-content:space-between}
+.ht-hl{color:#4ade80}.ht-hd{color:var(--dmr)}
+.ht-bar-row{display:flex;align-items:center;gap:8px;padding:2px 12px}
+.ht-lbl{color:#60a5fa;min-width:38px;font-size:11px}
+.ht-bg{flex:1;height:12px;background:#1a1a1d;border:1px solid #27272a;border-radius:2px;overflow:hidden}
+.ht-fill{height:100%;border-radius:1px;transition:width .8s ease}
+.ht-pct{min-width:36px;text-align:right;color:var(--mut);font-size:11px}
+.ht-proc{padding:4px 12px;max-height:160px;overflow:hidden}
+.ht-hdr{display:grid;grid-template-columns:36px 1fr 60px 60px 60px;gap:4px;color:#60a5fa;padding:2px 0;border-bottom:1px solid var(--bdr);font-size:11px}
+.ht-row{display:grid;grid-template-columns:36px 1fr 60px 60px 60px;gap:4px;color:var(--mut);padding:1px 0;font-size:11px}
+.ht-row.top{background:rgba(96,165,250,.1);color:#60a5fa}
+.ht-stat{display:flex;gap:16px;padding:6px 12px;border-top:1px solid var(--bdr);font-size:11px;color:var(--dmr)}
+.ht-stat span{color:var(--mut)}
 
-  .win-title {
-    font-size: 12px;
-    color: var(--dimmer);
-    margin-left: 6px;
-    letter-spacing: 0.02em;
-    pointer-events: none;
-  }
-  .win-title span { color: var(--muted); }
+/* MATRIX */
+#matrix-canvas{display:block;border-radius:0 0 12px 12px}
+.mtx-ov{position:absolute;inset:40px 0 0 0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.mtx-msg{font-size:13px;color:#4ade80;text-shadow:0 0 12px #4ade80;text-align:center;letter-spacing:.05em;line-height:1.8}
 
-  /* ── CONTENT ── */
-  .content {
-    padding: 24px 26px 28px;
-    overflow-y: auto;
-    flex: 1;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-  .content::-webkit-scrollbar { width: 4px; }
-  .content::-webkit-scrollbar-track { background: transparent; }
-  .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* TERMINAL */
+.term-wrap{padding:14px 16px;display:flex;flex-direction:column;height:100%;min-height:0}
+#tterm-out{flex:1;font-size:12px;color:var(--mut);line-height:1.7;overflow-y:auto;min-height:60px;scrollbar-width:thin;scrollbar-color:var(--bdr) transparent}
+#tterm-out::-webkit-scrollbar{width:3px}
+#tterm-out::-webkit-scrollbar-thumb{background:var(--bdr)}
+.tl.g{color:#4ade80}.tl.r{color:#f87171}.tl.b{color:#60a5fa}.tl.a{color:#fbbf24}.tl.d{color:var(--dmr)}.tl.m{color:#c084fc}
+.term-ir{display:flex;align-items:center;gap:8px;border-top:1px solid var(--bdr);padding-top:10px;margin-top:8px;flex-shrink:0}
+.term-pr{color:var(--dmr);font-size:12px;white-space:nowrap}
+#tterm-in{flex:1;background:transparent;border:none;outline:none;color:var(--txt);font-family:var(--f);font-size:12px;caret-color:var(--txt);min-width:0}
 
-  /* ── SECTIONS & STYLES (from your original code) ── */
-  .section { margin-bottom: 22px; opacity: 0; transition: opacity 0.25s; }
-  .section.visible { opacity: 1; }
-  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; opacity: 0; transition: opacity 0.3s; }
-  .divider.visible { opacity: 1; }
-  .prompt-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
-  .prompt-sym { color: var(--dimmer); font-size: 13px; padding-top: 1px; flex-shrink: 0; }
-  .cmd-text { color: var(--dimmer); font-size: 12px; }
-  .typing-cursor {
-    display: inline-block; width: 7px; height: 13px;
-    background: var(--dimmer); vertical-align: text-bottom;
-    margin-left: 1px; animation: blink 1s step-end infinite;
-  }
-  .final-cursor {
-    display: inline-block; width: 8px; height: 14px;
-    background: var(--text); vertical-align: text-bottom;
-    margin-left: 2px; animation: blink 1s step-end infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+/* ASCII */
+.ascii-wrap{padding:16px 18px;text-align:center}
+#ascii-art{font-size:8px;line-height:1.2;white-space:pre;font-family:var(--f);display:inline-block;text-align:left;color:#4ade80}
+.ascii-cap{font-size:11px;color:var(--dmr);margin-top:12px;line-height:1.6}
+.ascii-cap span{color:var(--mut)}
 
-  .hero-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-  .hero-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
-  .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-  .badge { font-size: 11px; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); background: var(--surface); }
-  .badge.green { border-color: #166534; color: #4ade80; background: #052e16; }
-  .badge.blue  { border-color: #1e3a5f; color: #60a5fa; background: #0c1a2e; }
-  .badge.amber { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
-
-  .body-indent { margin-left: 16px; }
-  .info-row { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--surface); }
-  .info-key { color: var(--dimmer); min-width: 88px; flex-shrink: 0; }
-  .info-val { color: #d4d4d8; }
-
-  .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip, .lang-chip {
-    display: flex; align-items: center; gap: 5px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 5px; padding: 4px 9px; font-size: 11px;
-    color: var(--muted); transition: border-color 0.15s;
-    font-family: var(--font);
-  }
-  .chip:hover, .lang-chip:hover { border-color: var(--border-hover); }
-  .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .js  { background: #eab308; } .ts  { background: #3b82f6; } .py  { background: #22c55e; }
-  .web3{ background: #a855f7; } .db  { background: #f97316; } .gr  { background: #52525b; }
-  .tag { font-size: 10px; padding: 1px 5px; border: 1px solid #3f3f46; border-radius: 3px; color: var(--dimmer); margin-left: 2px; }
-  
-  .lang-chip.dim { opacity: 0.42; }
-  .lbadge { font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 1px solid; }
-  .lbadge.native   { border-color: #166534; color: #4ade80; background: #052e16; }
-  .lbadge.fluent   { border-color: #1e3a5f; color: #60a5fa; background: #0c1a2e; }
-  .lbadge.learning { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
-  .lbadge.beginner { border-color: #3f3f46; color: #3f3f46; background: #09090b; }
-
-  .link-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .link-btn {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 11px; padding: 5px 12px;
-    border: 1px solid var(--border); border-radius: 5px;
-    background: var(--surface); color: var(--muted);
-    text-decoration: none; font-family: var(--font);
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .link-btn:hover { border-color: var(--border-hover); color: var(--text); }
-
-  .quote { border-left: 2px solid var(--border); padding: 8px 14px; color: var(--dim); font-size: 12px; font-style: italic; }
-  .quote span { color: var(--text); }
-  #final-prompt { display: none; align-items: center; gap: 6px; margin-top: 20px; }
-
-  /* ── TASKBAR & START MENU ── */
-  #taskbar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    height: 42px;
-    background: rgba(9,9,11,0.85);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center;
-    padding: 0 20px;
-    gap: 12px;
-    z-index: 1000;
-  }
-
-  .taskbar-item {
-    display: flex; align-items: center; justify-content: center; gap: 7px;
-    font-size: 11px; color: var(--muted);
-    padding: 4px 10px;
-    border: 1px solid var(--border);
-    border-radius: 5px;
-    background: var(--surface);
-    cursor: pointer;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-    font-family: var(--font);
-    height: 26px;
-  }
-  .taskbar-item:hover { border-color: var(--border-hover); color: var(--text); background: var(--border); }
-  .taskbar-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
-  .taskbar-clock { margin-left: auto; font-size: 11px; color: var(--dimmer); }
-
-  #btn-plus { font-size: 16px; font-weight: bold; width: 32px; padding: 0; }
-
-  #start-menu {
-    position: fixed;
-    bottom: 50px;
-    left: 20px;
-    background: rgba(24, 24, 27, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px);
-    transition: 0.2s ease;
-    z-index: 999;
-  }
-  #start-menu.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
-
-  .menu-item {
-    padding: 8px 12px;
-    font-size: 12px;
-    color: var(--muted);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.15s;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .menu-item:hover { background: var(--border); color: var(--text); }
-
-  /* ── EASTER EGG WINDOWS ── */
-  .hidden { display: none !important; }
-
-  #window-neofetch {
-    top: 10%; left: 10%;
-    width: 480px;
-    z-index: 2;
-  }
-
-  .neofetch-grid { display: flex; gap: 20px; font-size: 12px; align-items: center;}
-  .ascii-art { color: #60a5fa; font-weight: bold; line-height: 1.2; }
-  .neo-info p { margin-bottom: 4px; color: #d4d4d8; }
-  .neo-info span.lbl { color: #a1a1aa; font-weight: bold; margin-right: 8px; }
-  .color-blocks { display: flex; gap: 4px; margin-top: 10px; }
-  .cb { width: 16px; height: 16px; border-radius: 2px; }
-  .cb.c1 { background: #ef4444; } .cb.c2 { background: #22c55e; }
-  .cb.c3 { background: #eab308; } .cb.c4 { background: #3b82f6; }
-  .cb.c5 { background: #a855f7; } .cb.c6 { background: #f97316; }
-
-  #window-dvd {
-    top: 20%; left: 40%;
-    width: 300px; height: 250px;
-    z-index: 3;
-  }
-  #dvd-container {
-    position: relative; width: 100%; height: 100%;
-    background: #000; overflow: hidden;
-    border-radius: 0 0 12px 12px;
-  }
-  #dvd-logo {
-    position: absolute;
-    font-size: 20px; font-weight: bold;
-    color: #ef4444; text-shadow: 0 0 10px currentColor;
-    white-space: nowrap; user-select: none;
-  }
-
-  /* ── MOBILE ── */
-  @media (max-width: 640px) {
-    html, body { overflow: auto; }
-    #desktop { height: auto; min-height: 100vh; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 0 0 40px; }
-    #desktop::before { display: none; }
-    .window { position: static; transform: none; width: 100%; max-height: none; border-radius: 0; border-left: none; border-right: none; border-top: none; box-shadow: none; margin-bottom: 20px;}
-    .titlebar { cursor: default; }
-    .content { overflow-y: visible; padding: 20px 18px 28px; }
-    #taskbar { display: none; }
-    #start-menu { display: none; }
-  }
+/* MOBILE */
+@media(max-width:640px){
+  html,body{overflow:auto}
+  #desktop{position:static;height:auto;min-height:100vh;display:flex;flex-direction:column;overflow:visible;padding-bottom:0}
+  #desktop::before{display:none}
+  .win{position:static!important;transform:none!important;width:100%!important;max-height:none!important;border-radius:0!important;border:none!important;box-shadow:none!important;display:none!important;min-width:0}
+  #win-profile{display:flex!important}
+  .tb{cursor:default}
+  #taskbar,#plusmenu{display:none!important}
+  .p-inner{padding:18px 16px 24px}
+  .hn{font-size:18px}
+  .ik{min-width:72px}
+}
 </style>
 </head>
 <body>
-
 <div id="desktop">
 
-  <div id="window-main" class="window">
-    <div class="titlebar">
-      <div class="dot r"></div>
-      <div class="dot y"></div>
-      <div class="dot g"></div>
-      <span class="win-title">~/thebrainair — <span>npx profile@latest</span></span>
+  <!-- PROFILE -->
+  <div class="win open active" id="win-profile" style="width:640px;max-height:84vh;top:50%;left:50%;transform:translate(-50%,-50%)">
+    <div class="tb" data-win="win-profile">
+      <div class="dot dr" onclick="closeWin('win-profile')"></div>
+      <div class="dot dy" onclick="closeWin('win-profile')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>npx profile@latest</em></span>
     </div>
-
-    <div class="content" id="main-content">
-      <div id="s0" class="section visible">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd0"></span><span class="typing-cursor" id="cur0"></span>
-        </div>
-        <div id="body0" class="body-indent" style="padding:10px 0 4px;display:none">
-          <div class="hero-name">thebrainair</div>
-          <div class="hero-sub">Fullstack Developer in progress</div>
-          <div class="badge-row">
-            <span class="badge green">● available</span>
-            <span class="badge blue">co-founder @ $DARK</span>
-            <span class="badge amber">junior → mid</span>
+    <div class="wbody">
+      <div class="p-inner">
+        <div id="s0" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c0"></span><span class="tc" id="k0"></span></div>
+          <div id="b0" class="bi" style="padding:10px 0 4px;display:none">
+            <div class="hn" id="hname">thebrainair</div>
+            <div class="hs">Fullstack Developer in progress</div>
+            <div class="br">
+              <span class="badge bgr">● available</span>
+              <span class="badge bbl">co-founder @ $DARK</span>
+              <span class="badge bam">junior → mid</span>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div id="d0" class="divider"></div>
-
-      <div id="s1" class="section">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd1"></span><span class="typing-cursor" id="cur1" style="display:none"></span>
-        </div>
-        <div id="body1" class="body-indent" style="margin-top:8px;display:none">
-          <div class="info-row"><span class="info-key">status</span><span class="info-val">learning fullstack development</span></div>
-          <div class="info-row"><span class="info-key">frontend</span><span class="info-val">React · Tailwind · TypeScript</span></div>
-          <div class="info-row"><span class="info-key">backend</span><span class="info-val">Node.js · FastAPI · Flask</span></div>
-          <div class="info-row"><span class="info-key">interests</span><span class="info-val">Web Apps · Blockchain · Automation</span></div>
-          <div class="info-row"><span class="info-key">goal</span><span class="info-val">strong junior developer</span></div>
-          <div class="info-row"><span class="info-key">current</span><span class="info-val">co-founder / dev at $DARK</span></div>
-        </div>
-      </div>
-
-      <div id="d1" class="divider"></div>
-
-      <div id="s2" class="section">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd2"></span><span class="typing-cursor" id="cur2" style="display:none"></span>
-        </div>
-        <div id="body2" class="body-indent" style="margin-top:8px;display:none">
-          <div class="chip-grid">
-            <div class="chip"><div class="chip-dot js"></div>JavaScript</div>
-            <div class="chip"><div class="chip-dot ts"></div>TypeScript</div>
-            <div class="chip"><div class="chip-dot js"></div>React</div>
-            <div class="chip"><div class="chip-dot ts"></div>Vite</div>
-            <div class="chip"><div class="chip-dot js"></div>Tailwind</div>
-            <div class="chip"><div class="chip-dot py"></div>Python</div>
-            <div class="chip"><div class="chip-dot py"></div>FastAPI</div>
-            <div class="chip"><div class="chip-dot js"></div>Node.js</div>
-            <div class="chip"><div class="chip-dot db"></div>PostgreSQL</div>
-            <div class="chip"><div class="chip-dot db"></div>Redis</div>
-            <div class="chip"><div class="chip-dot web3"></div>Solidity</div>
-            <div class="chip"><div class="chip-dot web3"></div>TON<span class="tag">wip</span></div>
-            <div class="chip"><div class="chip-dot gr"></div>Linux</div>
-            <div class="chip"><div class="chip-dot gr"></div>Git</div>
+        <div id="d0" class="divider"></div>
+        <div id="s1" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c1"></span><span class="tc" id="k1" style="display:none"></span></div>
+          <div id="b1" class="bi" style="margin-top:8px;display:none">
+            <div class="ir"><span class="ik">status</span><span class="iv">learning fullstack development</span></div>
+            <div class="ir"><span class="ik">frontend</span><span class="iv">React · Tailwind · TypeScript</span></div>
+            <div class="ir"><span class="ik">backend</span><span class="iv">Node.js · FastAPI · Flask</span></div>
+            <div class="ir"><span class="ik">interests</span><span class="iv">Web Apps · Blockchain · Automation</span></div>
+            <div class="ir"><span class="ik">goal</span><span class="iv">strong junior developer</span></div>
+            <div class="ir"><span class="ik">current</span><span class="iv">co-founder / dev at $DARK</span></div>
           </div>
         </div>
-      </div>
-
-      <div id="d2" class="divider"></div>
-
-      <div id="s3" class="section">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd3"></span><span class="typing-cursor" id="cur3" style="display:none"></span>
-        </div>
-        <div id="body3" class="body-indent" style="margin-top:8px;display:none">
-          <div class="chip-grid">
-            <div class="lang-chip">🇬🇧 English <span class="lbadge fluent">fluent</span></div>
-            <div class="lang-chip">🇷🇺 Russian <span class="lbadge native">native</span></div>
-            <div class="lang-chip">🇦🇲 Armenian <span class="lbadge native">native</span></div>
-            <div class="lang-chip">🇪🇸 Spanish <span class="lbadge learning">learning</span></div>
-            <div class="lang-chip dim">🇫🇷 French <span class="lbadge beginner">beginner</span></div>
+        <div id="d1" class="divider"></div>
+        <div id="s2" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c2"></span><span class="tc" id="k2" style="display:none"></span></div>
+          <div id="b2" class="bi" style="margin-top:8px;display:none">
+            <div class="cg">
+              <div class="chip"><div class="cd cjs"></div>JavaScript</div>
+              <div class="chip"><div class="cd cts"></div>TypeScript</div>
+              <div class="chip"><div class="cd cjs"></div>React</div>
+              <div class="chip"><div class="cd cts"></div>Vite</div>
+              <div class="chip"><div class="cd cjs"></div>Tailwind</div>
+              <div class="chip"><div class="cd cpy"></div>Python</div>
+              <div class="chip"><div class="cd cpy"></div>FastAPI</div>
+              <div class="chip"><div class="cd cjs"></div>Node.js</div>
+              <div class="chip"><div class="cd cdb"></div>PostgreSQL</div>
+              <div class="chip"><div class="cd cdb"></div>Redis</div>
+              <div class="chip"><div class="cd cw3"></div>Solidity</div>
+              <div class="chip"><div class="cd cw3"></div>TON<span class="tag">wip</span></div>
+              <div class="chip"><div class="cd cgr"></div>Linux</div>
+              <div class="chip"><div class="cd cgr"></div>Git</div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div id="d3" class="divider"></div>
-
-      <div id="s4" class="section">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd4"></span><span class="typing-cursor" id="cur4" style="display:none"></span>
-        </div>
-        <div id="body4" class="body-indent" style="margin-top:8px;display:none">
-          <div class="link-row">
-            <a class="link-btn" href="https://t.me/thebraina1r" target="_blank" rel="noopener">↗ Telegram</a>
-            <a class="link-btn" href="https://thebrainair.com" target="_blank" rel="noopener">↗ Website</a>
-            <a class="link-btn" href="https://github.com/TheBrainAir" target="_blank" rel="noopener">↗ GitHub</a>
+        <div id="d2" class="divider"></div>
+        <div id="s3" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c3"></span><span class="tc" id="k3" style="display:none"></span></div>
+          <div id="b3" class="bi" style="margin-top:8px;display:none">
+            <div class="cg">
+              <div class="lc">🇬🇧 English <span class="lb flu">fluent</span></div>
+              <div class="lc">🇷🇺 Russian <span class="lb nat">native</span></div>
+              <div class="lc">🇦🇲 Armenian <span class="lb nat">native</span></div>
+              <div class="lc">🇪🇸 Spanish <span class="lb lrn">learning</span></div>
+              <div class="lc dim">🇫🇷 French <span class="lb beg">beginner</span></div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div id="d4" class="divider"></div>
-
-      <div id="s5" class="section">
-        <div class="prompt-line">
-          <span class="prompt-sym">$</span>
-          <span class="cmd-text" id="cmd5"></span><span class="typing-cursor" id="cur5" style="display:none"></span>
+        <div id="d3" class="divider"></div>
+        <div id="s4" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c4"></span><span class="tc" id="k4" style="display:none"></span></div>
+          <div id="b4" class="bi" style="margin-top:8px;display:none">
+            <div class="lr">
+              <a class="lbtn" href="https://t.me/thebraina1r" target="_blank" rel="noopener">↗ Telegram</a>
+              <a class="lbtn" href="https://thebrainair.com" target="_blank" rel="noopener">↗ Website</a>
+              <a class="lbtn" href="https://github.com/TheBrainAir" target="_blank" rel="noopener">↗ GitHub</a>
+            </div>
+          </div>
         </div>
-        <div id="body5" class="body-indent" style="margin-top:8px;display:none">
-          <div class="quote"><span>"I build things, break things, and then build them better."</span></div>
+        <div id="d4" class="divider"></div>
+        <div id="s5" class="section">
+          <div class="pl"><span class="ps">$</span><span class="ct" id="c5"></span><span class="tc" id="k5" style="display:none"></span></div>
+          <div id="b5" class="bi" style="margin-top:8px;display:none">
+            <div class="qt"><span>"I build things, break things, and then build them better."</span></div>
+          </div>
+        </div>
+        <div id="fp" style="display:none;align-items:center;gap:6px;margin-top:18px">
+          <span class="ps">$</span><span class="fc"></span>
         </div>
       </div>
-
-      <div id="final-prompt">
-        <span class="prompt-sym">$</span><span class="final-cursor"></span>
-      </div>
-
     </div>
   </div>
 
-  <div id="window-neofetch" class="window hidden">
-    <div class="titlebar">
-      <div class="dot r" title="Close"></div>
-      <div class="dot y"></div>
-      <div class="dot g"></div>
-      <span class="win-title">~/thebrainair — <span>neofetch</span></span>
+  <!-- PROJECTS -->
+  <div class="win" id="win-projects" style="width:560px;max-height:80vh;top:50px;left:80px">
+    <div class="tb" data-win="win-projects">
+      <div class="dot dr" onclick="closeWin('win-projects')"></div>
+      <div class="dot dy" onclick="closeWin('win-projects')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>ls active-projects/</em></span>
     </div>
-    <div class="content">
-      <div class="neofetch-grid">
-        <pre class="ascii-art">
-    |\__/,|   (`\
-  _.|o o  |_   ) )
- -(((---(((--------
-        </pre>
+    <div class="wbody">
+      <div class="p-inner">
+        <div class="pl" style="margin-bottom:14px"><span class="ps">$</span><span style="font-size:12px;color:var(--dmr)">ls -la active-projects/</span></div>
+        <div class="proj-grid">
+          <a class="proj-card" href="https://darkswap.tg" target="_blank" rel="noopener">
+            <div class="proj-top"><span class="proj-name">⬛ darkswap.tg</span><span class="proj-st live">● live</span></div>
+            <div class="proj-desc">Telegram-native DEX on TON. Swap tokens directly inside Telegram with zero friction.</div>
+            <div class="proj-tags"><span class="proj-tag">TON</span><span class="proj-tag">DeFi</span><span class="proj-tag">Telegram</span><span class="proj-tag">Web3</span></div>
+            <div class="proj-url">↗ darkswap.tg</div>
+          </a>
+          <a class="proj-card" href="https://cabinet.dark-vpn.com" target="_blank" rel="noopener">
+            <div class="proj-top"><span class="proj-name">🔒 dark-vpn.com</span><span class="proj-st live">● live</span></div>
+            <div class="proj-desc">Privacy-first VPN with crypto payments. Personal cabinet for managing subscriptions.</div>
+            <div class="proj-tags"><span class="proj-tag">Node.js</span><span class="proj-tag">React</span><span class="proj-tag">Privacy</span><span class="proj-tag">Crypto</span></div>
+            <div class="proj-url">↗ cabinet.dark-vpn.com</div>
+          </a>
+          <a class="proj-card" href="https://app.nftroulette.org" target="_blank" rel="noopener">
+            <div class="proj-top"><span class="proj-name">🎰 nftroulette.org</span><span class="proj-st live">● live</span></div>
+            <div class="proj-desc">Onchain NFT roulette. Spin, win, collect — all transparent on the blockchain.</div>
+            <div class="proj-tags"><span class="proj-tag">Solidity</span><span class="proj-tag">NFT</span><span class="proj-tag">DApp</span><span class="proj-tag">Gaming</span></div>
+            <div class="proj-url">↗ app.nftroulette.org</div>
+          </a>
+          <a class="proj-card" href="https://minter.darktoken.org" target="_blank" rel="noopener">
+            <div class="proj-top"><span class="proj-name">🪙 darktoken.org</span><span class="proj-st live">● live</span></div>
+            <div class="proj-desc">$DARK token minter. Launch and manage the dark ecosystem's native token.</div>
+            <div class="proj-tags"><span class="proj-tag">Solidity</span><span class="proj-tag">ERC-20</span><span class="proj-tag">Minter</span><span class="proj-tag">$DARK</span></div>
+            <div class="proj-url">↗ minter.darktoken.org</div>
+          </a>
+        </div>
+        <div style="margin-top:14px;display:flex;align-items:center;gap:6px">
+          <span class="ps">$</span><span class="fc"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEOFETCH -->
+  <div class="win" id="win-neo" style="width:500px;top:60px;left:160px">
+    <div class="tb" data-win="win-neo">
+      <div class="dot dr" onclick="closeWin('win-neo')"></div>
+      <div class="dot dy" onclick="closeWin('win-neo')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>neofetch</em></span>
+    </div>
+    <div class="wbody">
+      <div class="neo-wrap">
+        <pre id="neo-art">  ████████╗██████╗  █████╗ 
+     ██╔══╝██╔══██╗██╔══██╗
+     ██║   ██████╔╝███████║
+     ██║   ██╔══██╗██╔══██║
+     ██║   ██████╔╝██║  ██║
+     ╚═╝   ╚═════╝ ╚═╝  ╚═╝</pre>
         <div class="neo-info">
-          <p><span style="color:#60a5fa;font-weight:bold;">guest</span>@<span style="color:#60a5fa;font-weight:bold;">thebrainair</span></p>
-          <p>-------------------</p>
-          <p><span class="lbl">OS:</span> WebOS 3.1</p>
-          <p><span class="lbl">Host:</span> Browser Engine</p>
-          <p><span class="lbl">Uptime:</span> <span id="neo-uptime">0 mins</span></p>
-          <p><span class="lbl">Shell:</span> bash-like</p>
-          <p><span class="lbl">Theme:</span> Dark Matter</p>
-          <div class="color-blocks">
-            <div class="cb c1"></div><div class="cb c2"></div><div class="cb c3"></div>
-            <div class="cb c4"></div><div class="cb c5"></div><div class="cb c6"></div>
+          <div class="neo-row"><span class="neo-k" style="color:#4ade80">thebrainair</span><span class="neo-v" style="color:#4ade80">@localhost</span></div>
+          <div class="neo-sep">────────────────────</div>
+          <div class="neo-row"><span class="neo-k">OS</span><span class="neo-v">ArchLinux x86_64</span></div>
+          <div class="neo-row"><span class="neo-k">Host</span><span class="neo-v">MacBook Pro M2</span></div>
+          <div class="neo-row"><span class="neo-k">Shell</span><span class="neo-v">zsh 5.9</span></div>
+          <div class="neo-row"><span class="neo-k">Terminal</span><span class="neo-v">thebrainair.com</span></div>
+          <div class="neo-row"><span class="neo-k">Editor</span><span class="neo-v">VSCode + Neovim</span></div>
+          <div class="neo-row"><span class="neo-k">Stack</span><span class="neo-v">JS TS Python Solidity</span></div>
+          <div class="neo-row"><span class="neo-k">Focus</span><span class="neo-v">Fullstack + Web3</span></div>
+          <div class="neo-row"><span class="neo-k">Uptime</span><span class="neo-v" id="neo-uptime">calculating...</span></div>
+          <div class="neo-row"><span class="neo-k">Status</span><span class="neo-v" style="color:#4ade80">available for work</span></div>
+          <div class="neo-colors">
+            <div class="nc" style="background:#ef4444"></div><div class="nc" style="background:#eab308"></div>
+            <div class="nc" style="background:#22c55e"></div><div class="nc" style="background:#60a5fa"></div>
+            <div class="nc" style="background:#a855f7"></div><div class="nc" style="background:#f97316"></div>
+            <div class="nc" style="background:#fafafa"></div><div class="nc" style="background:#27272a"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="window-dvd" class="window hidden">
-    <div class="titlebar">
-      <div class="dot r" title="Close"></div>
-      <div class="dot y"></div>
-      <div class="dot g"></div>
-      <span class="win-title">~/easter-eggs — <span>dvd.sh</span></span>
+  <!-- HTOP -->
+  <div class="win" id="win-htop" style="width:560px;top:80px;left:140px">
+    <div class="tb" data-win="win-htop">
+      <div class="dot dr" onclick="closeWin('win-htop')"></div>
+      <div class="dot dy" onclick="closeWin('win-htop')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>htop</em></span>
     </div>
-    <div id="dvd-container">
-      <div id="dvd-logo">thebrainair</div>
+    <div class="wbody">
+      <div class="htop-wrap">
+        <div class="ht-head"><span class="ht-hl">thebrainair@localhost</span><span class="ht-hd" id="ht-time">--:--:--</span></div>
+        <div style="padding:8px 0 4px">
+          <div class="ht-bar-row"><span class="ht-lbl">CPU</span><div class="ht-bg"><div class="ht-fill" id="hb0" style="background:linear-gradient(90deg,#4ade80,#22c55e)"></div></div><span class="ht-pct" id="hp0">0%</span></div>
+          <div class="ht-bar-row"><span class="ht-lbl">Mem</span><div class="ht-bg"><div class="ht-fill" id="hb1" style="background:linear-gradient(90deg,#60a5fa,#3b82f6)"></div></div><span class="ht-pct" id="hp1">0%</span></div>
+          <div class="ht-bar-row"><span class="ht-lbl">Swp</span><div class="ht-bg"><div class="ht-fill" id="hb2" style="background:linear-gradient(90deg,#fbbf24,#f97316)"></div></div><span class="ht-pct" id="hp2">0%</span></div>
+          <div class="ht-bar-row"><span class="ht-lbl">Vibe</span><div class="ht-bg"><div class="ht-fill" style="background:linear-gradient(90deg,#c084fc,#a855f7);width:99%"></div></div><span class="ht-pct" style="color:#c084fc">99%</span></div>
+        </div>
+        <div class="ht-proc">
+          <div class="ht-hdr"><span>PID</span><span>NAME</span><span>CPU%</span><span>MEM%</span><span>STATE</span></div>
+          <div class="ht-row top"><span>1337</span><span>react-dev</span><span id="pc0">-</span><span>12.4</span><span style="color:#4ade80">R</span></div>
+          <div class="ht-row"><span>420</span><span>node_server</span><span id="pc1">-</span><span>8.2</span><span style="color:#4ade80">R</span></div>
+          <div class="ht-row"><span>69</span><span>postgres</span><span>0.1</span><span>4.8</span><span style="color:#4ade80">S</span></div>
+          <div class="ht-row"><span>777</span><span>dark_daemon</span><span id="pc2">-</span><span>2.1</span><span style="color:#c084fc">?</span></div>
+          <div class="ht-row"><span>999</span><span>coffee.exe</span><span>100</span><span>100</span><span style="color:#fbbf24">Z</span></div>
+          <div class="ht-row"><span>42</span><span>vscode</span><span>28.0</span><span>31.5</span><span style="color:#f87171">D</span></div>
+          <div class="ht-row"><span>2048</span><span>learn_rust</span><span>0.0</span><span>0.0</span><span style="color:#52525b">T</span></div>
+        </div>
+        <div class="ht-stat">Tasks:<span>7</span> Running:<span>4</span> Sleeping:<span>2</span> Zombie:<span>1 (coffee)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATRIX -->
+  <div class="win" id="win-matrix" style="width:480px;height:360px;top:70px;left:150px">
+    <div class="tb" data-win="win-matrix">
+      <div class="dot dr" onclick="closeWin('win-matrix')"></div>
+      <div class="dot dy" onclick="closeWin('win-matrix')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>matrix</em></span>
+    </div>
+    <div class="wbody" style="position:relative;overflow:hidden;padding:0">
+      <canvas id="matrix-canvas"></canvas>
+      <div class="mtx-ov">
+        <div class="mtx-msg">wake up, thebrainair...<br><span style="font-size:11px;opacity:.6">// the $DARK has you</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TERMINAL -->
+  <div class="win" id="win-term" style="width:520px;height:340px;top:90px;left:130px">
+    <div class="tb" data-win="win-term">
+      <div class="dot dr" onclick="closeWin('win-term')"></div>
+      <div class="dot dy" onclick="closeWin('win-term')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>bash</em></span>
+    </div>
+    <div class="wbody" style="display:flex;flex-direction:column">
+      <div class="term-wrap">
+        <div id="tterm-out"></div>
+        <div class="term-ir">
+          <span class="term-pr">thebrainair@localhost ~$</span>
+          <input id="tterm-in" type="text" autocomplete="off" spellcheck="false" placeholder="type a command...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASCII EASTER EGG -->
+  <div class="win" id="win-ascii" style="width:420px;top:70px;left:170px">
+    <div class="tb" data-win="win-ascii">
+      <div class="dot dr" onclick="closeWin('win-ascii')"></div>
+      <div class="dot dy" onclick="closeWin('win-ascii')"></div>
+      <div class="dot dg"></div>
+      <span class="wlabel">~/thebrainair — <em>🎉 secret found</em></span>
+    </div>
+    <div class="wbody">
+      <div class="ascii-wrap">
+        <pre id="ascii-art"></pre>
+        <div class="ascii-cap">
+          you found a secret! <span>// keep exploring</span><br>
+          <span style="color:#3f3f46;font-size:10px;margin-top:6px;display:block">
+            hints: type in terminal → neofetch · htop · matrix<br>
+            or try: konami code ↑↑↓↓←→←→BA
+          </span>
+        </div>
+      </div>
     </div>
   </div>
 
 </div>
 
-<div id="start-menu">
-  <div class="menu-item" onclick="openWindow('window-neofetch')">🐈 neofetch</div>
-  <div class="menu-item" onclick="openWindow('window-dvd')">💿 screensaver</div>
-</div>
-
+<!-- TASKBAR -->
 <div id="taskbar">
-  <div class="taskbar-item" id="btn-plus">+</div>
-  <div class="taskbar-item" onclick="openWindow('window-main')">
-    <div class="taskbar-dot"></div>
-    profile.terminal
-  </div>
-  <span class="taskbar-clock" id="clock"></span>
+  <div class="tbplus" id="btn-plus" onclick="toggleMenu()">+</div>
+  <div class="tbi lit" id="tb-profile" onclick="focusOrToggle('win-profile','tb-profile')"><div class="tdot"></div>profile.sh</div>
+  <div class="tbi" id="tb-projects" onclick="focusOrToggle('win-projects','tb-projects')"><div class="tdot off"></div>projects/</div>
+  <div class="tbr"><span class="tbclk" id="clock"></span></div>
+</div>
+
+<!-- PLUS MENU -->
+<div id="plusmenu">
+  <div class="pmi" onclick="openFromMenu('win-neo')"><span class="pmi-ico">⚡</span>neofetch</div>
+  <div class="pmi" onclick="openFromMenu('win-htop')"><span class="pmi-ico">📊</span>htop</div>
+  <div class="pmi" onclick="openFromMenu('win-matrix');startMatrix()"><span class="pmi-ico">🟩</span>matrix</div>
+  <div class="pmi" onclick="openFromMenu('win-term');initTerm()"><span class="pmi-ico">💻</span>bash terminal</div>
+  <div class="pmi-sep"></div>
+  <div class="pmi" onclick="openFromMenu('win-ascii')"><span class="pmi-ico">🎉</span>secret...</div>
 </div>
 
 <script>
-// ── CLOCK & UPTIME ──
-const startTime = Date.now();
-function updateClock() {
-  const el = document.getElementById('clock');
-  const upEl = document.getElementById('neo-uptime');
-  if (el) el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  if (upEl) {
-    const mins = Math.floor((Date.now() - startTime) / 60000);
-    upEl.textContent = `${mins} mins`;
-  }
-}
-updateClock();
-setInterval(updateClock, 1000);
-
-// ── MULTI-WINDOW DRAG LOGIC (Fixed) ──
-(function() {
-  let activeWin = null;
-  let ox = 0, oy = 0;
-  let highestZ = 10;
-  const isMobile = () => window.innerWidth <= 640;
-
-  document.querySelectorAll('.window').forEach(win => {
-    const bar = win.querySelector('.titlebar');
-    const closeBtn = win.querySelector('.dot.r');
-    
-    // Bring to front on click
-    win.addEventListener('mousedown', () => {
-      win.style.zIndex = ++highestZ;
-    });
-
-    // Close button logic
-    if (closeBtn && win.id !== 'window-main') {
-      closeBtn.addEventListener('click', () => {
-        win.classList.add('hidden');
-      });
-    }
-
-    let isFirstDrag = true;
-
-    if (bar) {
-      bar.addEventListener('mousedown', (e) => {
-        if (isMobile()) return;
-        activeWin = win;
-        win.style.zIndex = ++highestZ;
-        
-        // FIX: use getComputedStyle instead of inline style check
-        const computedTransform = window.getComputedStyle(win).transform;
-        if (isFirstDrag || computedTransform !== 'none') {
-          const rect = win.getBoundingClientRect();
-          win.style.left = rect.left + 'px';
-          win.style.top = rect.top + 'px';
-          win.style.transform = 'none';
-          isFirstDrag = false;
-        }
-
-        ox = e.clientX - win.getBoundingClientRect().left;
-        oy = e.clientY - win.getBoundingClientRect().top;
-        win.classList.add('dragging');
-        e.preventDefault();
-      });
-    }
-  });
-
-  document.addEventListener('mousemove', (e) => {
-    if (!activeWin) return;
-    const x = e.clientX - ox;
-    const y = e.clientY - oy;
-    activeWin.style.left = Math.max(0, Math.min(window.innerWidth - activeWin.offsetWidth, x)) + 'px';
-    activeWin.style.top = Math.max(0, Math.min(window.innerHeight - activeWin.offsetHeight, y)) + 'px';
-  });
-
-  document.addEventListener('mouseup', () => {
-    if (activeWin) activeWin.classList.remove('dragging');
-    activeWin = null;
-  });
-})();
-
-// ── START MENU & OPENING WINDOWS ──
-const plusBtn = document.getElementById('btn-plus');
-const startMenu = document.getElementById('start-menu');
-
-plusBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  startMenu.classList.toggle('visible');
+// ══ WINDOW MANAGER ══
+let zTop = 100;
+const WS = {};
+['win-profile','win-projects','win-neo','win-htop','win-matrix','win-term','win-ascii'].forEach(id => {
+  const el = document.getElementById(id);
+  WS[id] = { el, open: el.classList.contains('open') };
 });
 
-document.addEventListener('click', () => {
-  startMenu.classList.remove('visible');
-});
-
-window.openWindow = function(id) {
-  const win = document.getElementById(id);
-  if (win) {
-    win.classList.remove('hidden');
-    // Simulate mousedown to bring to front
-    const event = new MouseEvent('mousedown');
-    win.dispatchEvent(event);
-  }
+const TB_MAP = {
+  'win-profile':'tb-profile',
+  'win-projects':'tb-projects',
 };
 
-// ── DVD BOUNCER LOGIC ──
-const dvdLogo = document.getElementById('dvd-logo');
-const dvdCont = document.getElementById('dvd-container');
-let dx = 2, dy = 2, x = 10, y = 10;
-const colors = ['#ef4444', '#22c55e', '#eab308', '#3b82f6', '#a855f7', '#f97316'];
-let colorIdx = 0;
-
-function animateDVD() {
-  if (!document.getElementById('window-dvd').classList.contains('hidden')) {
-    const cw = dvdCont.clientWidth;
-    const ch = dvdCont.clientHeight;
-    const lw = dvdLogo.clientWidth;
-    const lh = dvdLogo.clientHeight;
-
-    x += dx; y += dy;
-
-    if (x + lw >= cw || x <= 0) {
-      dx = -dx;
-      colorIdx = (colorIdx + 1) % colors.length;
-      dvdLogo.style.color = colors[colorIdx];
-    }
-    if (y + lh >= ch || y <= 0) {
-      dy = -dy;
-      colorIdx = (colorIdx + 1) % colors.length;
-      dvdLogo.style.color = colors[colorIdx];
-    }
-
-    dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
-  }
-  requestAnimationFrame(animateDVD);
+function bringToFront(id) {
+  Object.values(WS).forEach(w => { w.el.classList.remove('active'); });
+  zTop += 2;
+  WS[id].el.style.zIndex = zTop;
+  WS[id].el.classList.add('active');
 }
-requestAnimationFrame(animateDVD);
 
-// ── TERMINAL ANIMATION ──
-const steps = [
-  { cmd: 'whoami',           cmdId: 'cmd0', curId: 'cur0', bodyId: 'body0', divId: 'd0', secId: 's0' },
-  { cmd: 'cat about.json',   cmdId: 'cmd1', curId: 'cur1', bodyId: 'body1', divId: 'd1', secId: 's1' },
-  { cmd: 'ls tech-stack/',   cmdId: 'cmd2', curId: 'cur2', bodyId: 'body2', divId: 'd2', secId: 's2' },
-  { cmd: 'cat languages.conf', cmdId: 'cmd3', curId: 'cur3', bodyId: 'body3', divId: 'd3', secId: 's3' },
-  { cmd: 'curl links.sh',    cmdId: 'cmd4', curId: 'cur4', bodyId: 'body4', divId: 'd4', secId: 's4' },
-  { cmd: 'echo $MOTTO',      cmdId: 'cmd5', curId: 'cur5', bodyId: 'body5', divId: null,  secId: 's5' },
+function openWin(id) {
+  if (!WS[id]) return;
+  WS[id].el.classList.add('open');
+  WS[id].open = true;
+  bringToFront(id);
+  // center if not yet positioned absolutely
+  const el = WS[id].el;
+  if (!el.dataset.positioned) {
+    const dw = document.getElementById('desktop').offsetWidth;
+    const dh = document.getElementById('desktop').offsetHeight;
+    el.style.transform = 'none';
+    el.style.left = Math.max(20, (dw - el.offsetWidth) / 2 + (Math.random()*60-30)) + 'px';
+    el.style.top  = Math.max(20, (dh - el.offsetHeight) / 2 + (Math.random()*40-20)) + 'px';
+    el.dataset.positioned = '1';
+  }
+  if (TB_MAP[id]) updateTb(TB_MAP[id], true);
+}
+
+function openFromMenu(id) {
+  toggleMenu();
+  openWin(id);
+}
+
+function closeWin(id) {
+  if (!WS[id]) return;
+  WS[id].el.classList.remove('open');
+  WS[id].open = false;
+  if (TB_MAP[id]) updateTb(TB_MAP[id], false);
+}
+
+function focusOrToggle(id, tbId) {
+  if (!WS[id]) return;
+  if (WS[id].open) {
+    if (WS[id].el.classList.contains('active')) {
+      closeWin(id);
+    } else {
+      bringToFront(id);
+    }
+  } else {
+    WS[id].el.classList.add('open');
+    WS[id].open = true;
+    bringToFront(id);
+    if (TB_MAP[id]) updateTb(TB_MAP[id], true);
+  }
+}
+
+function updateTb(tbId, on) {
+  const el = document.getElementById(tbId); if (!el) return;
+  const dot = el.querySelector('.tdot');
+  el.classList.toggle('lit', on);
+  if (dot) dot.classList.toggle('off', !on);
+}
+
+// click win to focus
+document.getElementById('desktop').addEventListener('mousedown', e => {
+  const win = e.target.closest('.win');
+  if (win && WS[win.id]) bringToFront(win.id);
+}, true);
+
+// ══ DRAGGING — clean & reliable ══
+(function(){
+  let drag = null;
+
+  function isMob(){ return window.innerWidth <= 640; }
+
+  function startDrag(winEl, cx, cy) {
+    if (isMob()) return;
+    // resolve current position if transform still active
+    if (winEl.style.transform && winEl.style.transform !== 'none') {
+      const r = winEl.getBoundingClientRect();
+      winEl.style.transform = 'none';
+      winEl.style.left = r.left + 'px';
+      winEl.style.top  = r.top  + 'px';
+      winEl.dataset.positioned = '1';
+    }
+    const r = winEl.getBoundingClientRect();
+    drag = { el: winEl, ox: cx - r.left, oy: cy - r.top };
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'grabbing';
+  }
+
+  function doDrag(cx, cy) {
+    if (!drag) return;
+    const dw = window.innerWidth;
+    const dh = window.innerHeight - 44;
+    const w = drag.el.offsetWidth, h = drag.el.offsetHeight;
+    drag.el.style.left = Math.max(0, Math.min(dw - w, cx - drag.ox)) + 'px';
+    drag.el.style.top  = Math.max(0, Math.min(dh - 40, cy - drag.oy)) + 'px';
+  }
+
+  function endDrag() {
+    if (!drag) return;
+    drag = null;
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+  }
+
+  document.addEventListener('mousedown', e => {
+    const tb = e.target.closest('.tb');
+    if (!tb || e.target.classList.contains('dot')) return;
+    const win = tb.closest('.win');
+    if (!win) return;
+    bringToFront(win.id);
+    startDrag(win, e.clientX, e.clientY);
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => { if(drag) doDrag(e.clientX, e.clientY); });
+  document.addEventListener('mouseup', endDrag);
+
+  // touch drag (tablets etc)
+  document.addEventListener('touchstart', e => {
+    const tb = e.target.closest('.tb');
+    if (!tb || isMob()) return;
+    const win = tb.closest('.win'); if (!win) return;
+    const t = e.touches[0];
+    bringToFront(win.id);
+    startDrag(win, t.clientX, t.clientY);
+  }, {passive:true});
+  document.addEventListener('touchmove', e => {
+    if (!drag) return;
+    const t = e.touches[0];
+    doDrag(t.clientX, t.clientY);
+    e.preventDefault();
+  }, {passive:false});
+  document.addEventListener('touchend', endDrag);
+})();
+
+// ══ PLUS MENU ══
+function toggleMenu() {
+  document.getElementById('plusmenu').classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('#plusmenu') && !e.target.closest('#btn-plus'))
+    document.getElementById('plusmenu').classList.remove('open');
+});
+
+// ══ CLOCK ══
+function tick() {
+  const n = new Date();
+  const ts = n.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  document.getElementById('clock').textContent = ts;
+  const ht = document.getElementById('ht-time'); if(ht) ht.textContent = ts;
+  const nu = document.getElementById('neo-uptime');
+  if(nu){ const s=Math.floor(n/1000); nu.textContent = Math.floor(s/3600)%24+'h '+Math.floor(s/60)%60+'m'; }
+}
+tick(); setInterval(tick, 1000);
+
+// ══ HTOP LIVE ══
+function rnd(a,b){ return Math.random()*(b-a)+a; }
+function htopTick(){
+  const c=rnd(12,72),m=rnd(28,54),s=rnd(1,10);
+  const set=(id,v)=>{ const e=document.getElementById(id); if(e)e.style.width=v+'%'; };
+  const txt=(id,v)=>{ const e=document.getElementById(id); if(e)e.textContent=v; };
+  set('hb0',c); txt('hp0',c.toFixed(1)+'%');
+  set('hb1',m); txt('hp1',m.toFixed(1)+'%');
+  set('hb2',s); txt('hp2',s.toFixed(1)+'%');
+  ['pc0','pc1','pc2'].forEach((id,i)=>txt(id, rnd(i*4,i*14+16).toFixed(1)));
+}
+htopTick(); setInterval(htopTick, 1400);
+
+// ══ MATRIX ══
+let matRaf = null;
+function startMatrix(){
+  const cvs = document.getElementById('matrix-canvas'); if(!cvs) return;
+  const p = cvs.parentElement;
+  cvs.width = p.offsetWidth || 480;
+  cvs.height = p.offsetHeight - 0 || 300;
+  const ctx = cvs.getContext('2d');
+  const cols = Math.floor(cvs.width/14);
+  const drops = Array(cols).fill(1);
+  const chars = 'アイウエオカキクケコサシスセソタチツテトABCDEFGHIJKLM0123456789$DARK@#%^&*';
+  if(matRaf) cancelAnimationFrame(matRaf);
+  function draw(){
+    ctx.fillStyle='rgba(9,9,11,0.07)';
+    ctx.fillRect(0,0,cvs.width,cvs.height);
+    drops.forEach((y,i)=>{
+      const c=chars[Math.floor(Math.random()*chars.length)];
+      ctx.fillStyle = i%4===0?'#4ade80':'#166534';
+      ctx.font='13px JetBrains Mono,monospace';
+      ctx.fillText(c, i*14, y*14);
+      if(y*14>cvs.height && Math.random()>.975) drops[i]=0;
+      drops[i]++;
+    });
+    matRaf=requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ══ TERMINAL ══
+let termInited=false;
+const hist=[]; let hidx=-1;
+const CMDS={
+  help:()=>[
+    {t:'━━━━━━━━━━━━━━━━━━━━━━━━━━━',c:'d'},
+    {t:'  thebrainair bash v2.0',c:'g'},
+    {t:'━━━━━━━━━━━━━━━━━━━━━━━━━━━',c:'d'},
+    {t:'  whoami      who am i'},
+    {t:'  skills      tech stack'},
+    {t:'  projects    active projects'},
+    {t:'  contact     find me online'},
+    {t:'  dark        what is $DARK?'},
+    {t:'  neofetch    system info',c:'b'},
+    {t:'  htop        processes',c:'b'},
+    {t:'  matrix      go deeper 👁',c:'b'},
+    {t:'  motto       words to live by'},
+    {t:'  hack        i dare you',c:'a'},
+    {t:'  clear       clear screen'},
+    {t:'  exit        close window'},
+    {t:'━━━━━━━━━━━━━━━━━━━━━━━━━━━',c:'d'},
+  ],
+  whoami:()=>[{t:'thebrainair',c:'g'},{t:'──────────────',c:'d'},{t:'→ fullstack dev in progress'},{t:'→ co-founder @ $DARK'},{t:'→ builds on TON + ETH'},{t:'→ based somewhere 🌑'}],
+  skills:()=>[{t:'frontend:',c:'b'},{t:'  React · TypeScript · Tailwind · Vite'},{t:'backend:',c:'b'},{t:'  Node.js · FastAPI · Flask · Python'},{t:'web3:',c:'b'},{t:'  Solidity · TON · DApps',c:'a'},{t:'db:',c:'b'},{t:'  PostgreSQL · Redis'}],
+  projects:()=>[{t:'active projects:',c:'g'},{t:'  darkswap.tg         TON DEX on Telegram'},{t:'  cabinet.dark-vpn.com  VPN + crypto'},{t:'  app.nftroulette.org   NFT roulette'},{t:'  minter.darktoken.org  $DARK minter'}],
+  contact:()=>[{t:'t.me/thebraina1r',c:'b'},{t:'github.com/TheBrainAir',c:'b'},{t:'thebrainair.com',c:'b'}],
+  dark:()=>[{t:'$DARK — built in the shadows.',c:'d'},{t:''},{t:'  DeFi ecosystem on TON.',c:'m'},{t:'  swap. earn. disappear.',c:'m'},{t:''},{t:'// details: classified.',c:'d'},{t:'// stay tuned. 🌑',c:'d'}],
+  neofetch:()=>{ openWin('win-neo'); return [{t:'opening neofetch...',c:'g'}]; },
+  htop:()=>{ openWin('win-htop'); return [{t:'opening htop...',c:'g'}]; },
+  matrix:()=>{ openWin('win-matrix'); startMatrix(); return [{t:'wake up, thebrainair...',c:'g'},{t:'// the $DARK has you',c:'d'}]; },
+  motto:()=>[{t:'"I build things, break things,'},{t:' and then build them better."'}],
+  hack:()=>[{t:'initializing...',c:'g'},{t:'connecting to mainframe...',c:'g'},{t:'ACCESS DENIED.',c:'r'},{t:'nice try 😄',c:'d'}],
+  'sudo rm -rf /':()=>[{t:'[sudo] password:',c:'r'},{t:'filesystem intact.',c:'r'},{t:'this is a portfolio.',c:'d'}],
+  clear:()=>'CLEAR',
+  exit:()=>'EXIT',
+};
+
+function initTerm(){
+  if(termInited){ document.getElementById('tterm-in').focus(); return; }
+  termInited=true;
+  tPrint([{t:'thebrainair bash v2.0',c:'g'},{t:'type "help" to see commands.',c:'d'},{t:''}]);
+  const inp=document.getElementById('tterm-in');
+  inp.addEventListener('keydown',e=>{
+    if(e.key==='Enter'){
+      const raw=inp.value.trim(), cmd=raw.toLowerCase();
+      if(!cmd) return;
+      hist.unshift(cmd); hidx=-1;
+      tPrint([{t:'$ '+raw,c:'b'}]);
+      inp.value='';
+      const fn=CMDS[cmd];
+      if(fn){ const r=fn(); if(r==='CLEAR'){document.getElementById('tterm-out').innerHTML='';return;} if(r==='EXIT'){closeWin('win-term');return;} tPrint(r); }
+      else tPrint([{t:'bash: '+cmd+': command not found',c:'r'},{t:'type "help"',c:'d'}]);
+      tPrint([{t:''}]);
+    }
+    if(e.key==='ArrowUp'){hidx=Math.min(hidx+1,hist.length-1);inp.value=hist[hidx]||'';e.preventDefault();}
+    if(e.key==='ArrowDown'){hidx=Math.max(hidx-1,-1);inp.value=hidx<0?'':hist[hidx];e.preventDefault();}
+  });
+  inp.focus();
+}
+function tPrint(lines){
+  const out=document.getElementById('tterm-out');
+  lines.forEach(l=>{const d=document.createElement('div');d.className='tl'+(l.c?' '+l.c:'');d.textContent=l.t||'';out.appendChild(d);});
+  out.scrollTop=out.scrollHeight;
+}
+document.getElementById('win-term').addEventListener('click',()=>{ const i=document.getElementById('tterm-in'); if(i)i.focus(); });
+
+// ══ ASCII ART ══
+document.getElementById('ascii-art').textContent = `
+  ████████╗██╗  ██╗███████╗
+     ██╔══╝██║  ██║██╔════╝
+     ██║   ███████║█████╗  
+     ██║   ██╔══██║██╔══╝  
+     ██║   ██║  ██║███████╗
+     ╚═╝   ╚═╝  ╚═╝╚══════╝
+  ██████╗ ██████╗  █████╗ 
+  ██╔══██╗██╔══██╗██╔══██╗
+  ██████╔╝██████╔╝███████║
+  ██╔══██╗██╔══██╗██╔══██║
+  ██████╔╝██║  ██║██║  ██║
+  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+
+  // thebrainair
+  // builds in the dark  🌑`;
+
+// ══ PROFILE ANIMATION ══
+const steps=[
+  {cmd:'whoami',          ci:'c0',ki:'k0',bi:'b0',di:null,si:'s0'},
+  {cmd:'cat about.json',  ci:'c1',ki:'k1',bi:'b1',di:'d0',si:'s1'},
+  {cmd:'ls tech-stack/',  ci:'c2',ki:'k2',bi:'b2',di:'d1',si:'s2'},
+  {cmd:'cat languages.conf',ci:'c3',ki:'k3',bi:'b3',di:'d2',si:'s3'},
+  {cmd:'curl links.sh',   ci:'c4',ki:'k4',bi:'b4',di:'d3',si:'s4'},
+  {cmd:'echo $MOTTO',     ci:'c5',ki:'k5',bi:'b5',di:'d4',si:'s5'},
 ];
-
-function typeCmd(text, cmdEl, curEl, done) {
-  curEl.style.display = 'inline-block';
-  let i = 0;
-  const speed = 36;
-  const iv = setInterval(() => {
-    cmdEl.textContent += text[i++];
-    if (i >= text.length) {
-      clearInterval(iv);
-      curEl.style.display = 'none';
-      done();
-    }
-  }, speed);
+function typeIt(txt,el,cur,cb){
+  cur.style.display='inline-block'; let i=0;
+  const iv=setInterval(()=>{ el.textContent+=txt[i++]; if(i>=txt.length){clearInterval(iv);cur.style.display='none';cb();} },34);
 }
-
-function fadeIn(el, display = 'block') {
-  el.style.display = display;
-  el.style.opacity = '0';
-  requestAnimationFrame(() => {
-    el.style.transition = 'opacity 0.25s';
-    el.style.opacity = '1';
+function fadeIn(el){
+  el.style.display='block'; el.style.opacity='0';
+  requestAnimationFrame(()=>{ el.style.transition='opacity .2s'; el.style.opacity='1'; });
+}
+function runStep(i){
+  if(i>=steps.length){ const fp=document.getElementById('fp'); fp.style.display='flex'; return; }
+  const s=steps[i];
+  document.getElementById(s.si).classList.add('vis');
+  if(s.di){ const dv=document.getElementById(s.di); if(dv) dv.classList.add('vis'); }
+  typeIt(s.cmd, document.getElementById(s.ci), document.getElementById(s.ki), ()=>{
+    setTimeout(()=>{ fadeIn(document.getElementById(s.bi)); setTimeout(()=>runStep(i+1),370); },140);
   });
 }
+setTimeout(()=>runStep(0),500);
 
-function runStep(i) {
-  if (i >= steps.length) {
-    const fp = document.getElementById('final-prompt');
-    fp.style.display = 'flex';
-    // Scroll down to the prompt
-    const mainContent = document.getElementById('main-content');
-    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
-    return;
-  }
-
-  const s = steps[i];
-  const sec = document.getElementById(s.secId);
-  const curEl = document.getElementById(s.curId);
-  const cmdEl = document.getElementById(s.cmdId);
-
-  sec.classList.add('visible');
-  curEl.style.display = 'inline-block';
-
-  if (i > 0 && steps[i-1].divId) {
-    const prevDiv = document.getElementById(steps[i-1].divId);
-    if (prevDiv) prevDiv.classList.add('visible');
-  }
-
-  typeCmd(s.cmd, cmdEl, curEl, () => {
-    setTimeout(() => {
-      const body = document.getElementById(s.bodyId);
-      fadeIn(body);
-      const mainContent = document.getElementById('main-content');
-      mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
-      setTimeout(() => runStep(i + 1), 420);
-    }, 150);
-  });
-}
-
-setTimeout(() => runStep(0), 400);
+// ══ EASTER EGGS ══
+// triple-click name
+let cc=0,ct=null;
+document.getElementById('hname').addEventListener('click',()=>{
+  cc++; clearTimeout(ct); ct=setTimeout(()=>cc=0,500);
+  if(cc>=3){ cc=0; openWin('win-ascii'); }
+});
+// type "dark" anywhere
+let ebuf='';
+document.addEventListener('keypress',e=>{
+  if(e.target.tagName==='INPUT') return;
+  ebuf=(ebuf+e.key).slice(-8).toLowerCase();
+  if(ebuf.includes('dark')){ ebuf=''; openWin('win-ascii'); }
+  if(ebuf.includes('neo')){ ebuf=''; openWin('win-neo'); }
+  if(ebuf.includes('top')){ ebuf=''; openWin('win-htop'); }
+});
+// konami code → matrix
+let kbuf=[], kseq=[38,38,40,40,37,39,37,39,66,65];
+document.addEventListener('keydown',e=>{
+  kbuf.push(e.keyCode); kbuf=kbuf.slice(-10);
+  if(kbuf.join(',')===kseq.join(',')){ openWin('win-matrix'); startMatrix(); }
+});
 </script>
 </body>
 </html>
