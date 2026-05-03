@@ -29,7 +29,7 @@
 ## ⛓ Blockchain / Web3
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=solidity,tact" />
+  <img src="https://skillicons.dev/icons?i=solidity,tolk" />
 </p>
 
 
