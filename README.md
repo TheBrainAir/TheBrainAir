@@ -33,22 +33,6 @@
 
 ---
 
-## 💻 Languages in Repos
-
-<p align="center">
-  <img src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=TheBrainAir&theme=radical" />
-</p>
-
----
-
-## ⚡ Commit Languages
-
-<p align="center">
-  <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=TheBrainAir&theme=radical" />
-</p>
-
----
-
 ## 🐍 Contribution Snake
 
 <p align="center">
