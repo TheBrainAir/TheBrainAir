@@ -26,10 +26,14 @@
 
 ---
 
-## ⛓ Blockchain / Web3
-
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=solidity,tolk" />
+  <img src="https://skillicons.dev/icons?i=solidity" alt="Solidity" />
+  
+  <a href="https://ton.org/">
+    <img src="https://img.shields.io/badge/TON-0098EA?style=for-the-badge&logo=ton&logoColor=white" alt="TON" />
+  </a>
+  <img src="https://img.shields.io/badge/Tolk-1E1E6B?style=for-the-badge" alt="Tolk" />
+  <img src="https://img.shields.io/badge/FunC-000000?style=for-the-badge" alt="FunC" />
 </p>
 
 
