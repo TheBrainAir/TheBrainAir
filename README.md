@@ -9,10 +9,10 @@
 
 ## 🧠 About Me
 
--  I’m currently learning **Fullstack Development**
+- I’m currently learning **Fullstack Development**
 - Focus: **React, Tailwind, TypeScript**
-- Backend: **Node.js / FastAPI / Flask**
-- Interested in: **Web Apps, Blockchain, Automation**
+- Backend: **Node.js / FastAPI**
+- Interested in **Web Apps, Blockchain, Automation**
 - Goal: Become a strong **Junior Developer**
 - Currently: **Co-Founder / Dev at $DARK**
 
@@ -21,11 +21,19 @@
 ## 🚀 Tech Stack
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,html,css,tailwind,nodejs,python,flask,git,github,linux" />
+  <img src="https://skillicons.dev/icons?i=js,ts,react,vite,html,css,tailwind,nodejs,python,git,linux,postgresql,sqlite" />
+</p>
+
+---
+
+## ⛓ Blockchain / Web3
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=solidity,ethereum" />
 </p>
 
 <p align="center">
-  <b>Blockchain / Web3:</b> Smart Contracts • Solidity • DApps • TON (learning)
+  Smart Contracts • Solidity • DApps • TON (learning)
 </p>
 
 ---
@@ -70,8 +78,8 @@
 
 ## ⚡ Current Status
 
-> 🚀 Co-Founder & Developer at **$DARK**  
-> Building something experimental in Web3 / blockchain space.
+> Co-Founder & Developer at $DARK  
+> Building experimental Web3 / blockchain products.
 
 ---
 
