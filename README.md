@@ -27,8 +27,6 @@
 ---
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=solidity" alt="Solidity" />
-  
   <a href="https://ton.org/">
     <img src="https://img.shields.io/badge/TON-0098EA?style=for-the-badge&logo=ton&logoColor=white" alt="TON" />
   </a>
