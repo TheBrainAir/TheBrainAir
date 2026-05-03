@@ -1,75 +1,114 @@
-<h1 align="center">Hi 👋, I'm Yuri</h1>
-<h3 align="center">Fullstack Developer in progress 🚀</h3>
+<!-- header -->
+<div align="center">
 
-<p align="center">
-  <img src="https://komarev.com/ghpvc/?username=TheBrainAir&label=Profile%20views&color=0e75b6&style=flat" />
-</p>
+```
+npx profile@thebrainair
+```
 
----
+# Yuri Sargsyan
 
-## 🧠 About Me
+**Fullstack Developer in progress** · Co-Founder @ $DARK
 
--  I’m currently learning **Fullstack Development**
--  Front: **React, Tailwind, TypeScript**
--  Backe: **Node.js / FastAPI / Flask**
--  Interested in: **Web Apps, Blockchain, Automation**
--  Goal: Become a strong **Junior Developer**
--  Currently: **Co-Founder / Dev at $DARK**
+![](https://img.shields.io/badge/status-building-black?style=flat-square&labelColor=000)
+![](https://img.shields.io/badge/goal-junior%20→%20mid-black?style=flat-square&labelColor=000)
+![](https://komarev.com/ghpvc/?username=TheBrainAir&style=flat-square&color=000000&label=views)
 
----
-
-## 🚀 Tech Stack
-
-<p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,vite,html,css,tailwind,nodejs,python,git,postgresql,redis,linux" />
-</p>
-
-<p align="center">
-  <b>Blockchain / Web3:</b> Smart Contracts • Solidity • DApps • TON (learning)
-</p>
+</div>
 
 ---
 
-## 📊 GitHub Overview
+## `$ cat about.json`
 
-<p align="center">
-  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=TheBrainAir&theme=radical" />
-</p>
-
----
-
-## 🐍 Contribution Snake
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake.svg" />
-    <img alt="snake animation" src="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake.svg" />
-  </picture>
-</p>
+```json
+{
+  "name":      "Yuri Sargsyan",
+  "role":      "Fullstack Developer in progress",
+  "current":   "Co-Founder / Dev @ $DARK",
+  "frontend":  ["React", "TypeScript", "Tailwind"],
+  "backend":   ["Node.js", "FastAPI", "Flask"],
+  "interests": ["Web Apps", "Blockchain", "Automation"],
+  "goal":      "Become a strong Junior Developer"
+}
+```
 
 ---
 
-## 🌐 Connect with Me
+## `$ ls tech-stack/`
 
-<p align="center">
-  <a href="https://t.me/thebraina1r">
-    <img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram" />
-  </a>
+**Frontend**
 
-  <a href="https://thebrainair.com">
-    <img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=google-chrome" />
-  </a>
+![JS](https://img.shields.io/badge/JavaScript-000?style=flat-square&logo=javascript)
+![TS](https://img.shields.io/badge/TypeScript-000?style=flat-square&logo=typescript)
+![React](https://img.shields.io/badge/React-000?style=flat-square&logo=react)
+![Vite](https://img.shields.io/badge/Vite-000?style=flat-square&logo=vite)
+![Tailwind](https://img.shields.io/badge/Tailwind-000?style=flat-square&logo=tailwindcss)
+![HTML](https://img.shields.io/badge/HTML5-000?style=flat-square&logo=html5)
+![CSS](https://img.shields.io/badge/CSS3-000?style=flat-square&logo=css3)
 
-  <a href="https://www.linkedin.com/in/yuri-sargsyan">
-    <img src="https://img.shields.io/badge/LinkedIn-000?style=for-the-badge&logo=linkedin" />
-  </a>
-</p>
+**Backend**
+
+![Node](https://img.shields.io/badge/Node.js-000?style=flat-square&logo=nodedotjs)
+![Python](https://img.shields.io/badge/Python-000?style=flat-square&logo=python)
+![FastAPI](https://img.shields.io/badge/FastAPI-000?style=flat-square&logo=fastapi)
+![Flask](https://img.shields.io/badge/Flask-000?style=flat-square&logo=flask)
+
+**Databases & Infra**
+
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-000?style=flat-square&logo=postgresql)
+![Redis](https://img.shields.io/badge/Redis-000?style=flat-square&logo=redis)
+![Linux](https://img.shields.io/badge/Linux-000?style=flat-square&logo=linux)
+![Git](https://img.shields.io/badge/Git-000?style=flat-square&logo=git)
+
+**Blockchain / Web3**
+
+![Solidity](https://img.shields.io/badge/Solidity-000?style=flat-square&logo=solidity)
+![Ethereum](https://img.shields.io/badge/Smart%20Contracts-000?style=flat-square&logo=ethereum)
+![TON](https://img.shields.io/badge/TON-000?style=flat-square&logo=ton)
 
 ---
 
-## ⚡ Fun Fact
+## `$ cat stats.sh`
 
+<div align="center">
+
+![GitHub Stats](https://github-readme-stats.vercel.app/api?username=TheBrainAir&show_icons=true&theme=dark&bg_color=09090b&border_color=27272a&icon_color=ffffff&title_color=ffffff&text_color=71717a&hide_border=false)
+
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=TheBrainAir&layout=compact&theme=dark&bg_color=09090b&border_color=27272a&title_color=ffffff&text_color=71717a)
+
+</div>
+
+---
+
+## `$ watch snake.sh`
+
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake.svg" />
+  <img alt="snake" src="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake.svg" />
+</picture>
+
+</div>
+
+---
+
+## `$ curl links.sh`
+
+<div align="center">
+
+[![Telegram](https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram)](https://t.me/thebraina1r)
+[![Website](https://img.shields.io/badge/Website-000?style=for-the-badge&logo=googlechrome)](https://thebrainair.com)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-000?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/yuri-sargsyan)
+
+</div>
+
+---
+
+<div align="center">
+
+```
 > I build things, break things, and then build them better.
+```
 
----
+</div>
