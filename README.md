@@ -10,8 +10,8 @@
 ## 🧠 About Me
 
 -  I’m currently learning **Fullstack Development**
--  Focus: **React, Tailwind, TypeScript**
--  Backend: **Node.js / FastAPI / Flask**
+-  Front: **React, Tailwind, TypeScript**
+-  Backe: **Node.js / FastAPI / Flask**
 -  Interested in: **Web Apps, Blockchain, Automation**
 -  Goal: Become a strong **Junior Developer**
 -  Currently: **Co-Founder / Dev at $DARK**
@@ -21,7 +21,7 @@
 ## 🚀 Tech Stack
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,html,css,tailwind,nodejs,python,flask,git,github,linux" />
+  <img src="https://skillicons.dev/icons?i=js,ts,react,html,css,tailwind,nodejs,python,flask,git,sql,postgresql,redis,linux" />
 </p>
 
 <p align="center">
