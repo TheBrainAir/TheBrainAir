@@ -25,11 +25,26 @@
 
 ---
 
-## 📊 GitHub Stats
+## 📊 GitHub Overview
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=TheBrainAir&show_icons=true&theme=tokyonight" />
-  <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=TheBrainAir&layout=compact&theme=tokyonight" />
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=TheBrainAir&theme=radical" />
+</p>
+
+---
+
+## 💻 Languages in Repos
+
+<p align="center">
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/repos-per-language?username=TheBrainAir&theme=radical" />
+</p>
+
+---
+
+## ⚡ Commit Languages
+
+<p align="center">
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=TheBrainAir&theme=radical" />
 </p>
 
 ---
@@ -49,7 +64,6 @@
 ## 🌐 Connect with Me
 
 <p align="center">
-  <!-- Replace links with your real ones -->
   <a href="#"><img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Instagram-000?style=for-the-badge&logo=instagram" /></a>
   <a href="#"><img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=google-chrome" /></a>
