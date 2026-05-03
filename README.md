@@ -14,21 +14,18 @@
 - 🛠 Backend: **Node.js / FastAPI / Flask**
 - 🧩 Interested in: **Web Apps, Blockchain, Automation**
 - 🎯 Goal: Become a strong **Junior Developer**
+- 🚀 Currently: **Co-Founder / Dev at $DARK**
 
 ---
 
 ## 🚀 Tech Stack
 
 <p align="center">
-
   <img src="https://skillicons.dev/icons?i=js,ts,react,html,css,tailwind,nodejs,python,flask,git,github,linux" />
-
 </p>
 
 <p align="center">
-
   <b>Blockchain / Web3:</b> Smart Contracts • Solidity • DApps • TON (learning)
-
 </p>
 
 ---
@@ -56,10 +53,25 @@
 ## 🌐 Connect with Me
 
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Instagram-000?style=for-the-badge&logo=instagram" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=google-chrome" /></a>
+  <a href="https://t.me/thebraina1r">
+    <img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram" />
+  </a>
+
+  <a href="https://thebrainair.com">
+    <img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=google-chrome" />
+  </a>
+
+  <a href="https://www.linkedin.com/in/yuri-sargsyan">
+    <img src="https://img.shields.io/badge/LinkedIn-000?style=for-the-badge&logo=linkedin" />
+  </a>
 </p>
+
+---
+
+## ⚡ Current Status
+
+> 🚀 Co-Founder & Developer at **$DARK**  
+> Building something experimental in Web3 / blockchain space.
 
 ---
 
