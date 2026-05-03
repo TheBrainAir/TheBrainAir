@@ -21,7 +21,7 @@
 ## 🚀 Tech Stack
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=js,ts,react,vite,html,css,tailwind,nodejs,python,git,linux,postgresql,sqlite" />
+  <img src="https://skillicons.dev/icons?i=js,ts,react,vite,html,css,tailwind,nodejs,python,git,linux,postgresql,redis" />
 </p>
 
 ---
@@ -29,12 +29,9 @@
 ## ⛓ Blockchain / Web3
 
 <p align="center">
-  <img src="https://skillicons.dev/icons?i=solidity,ethereum" />
+  <img src="https://skillicons.dev/icons?i=solidity,ton" />
 </p>
 
-<p align="center">
-  Smart Contracts • Solidity • DApps • TON (learning)
-</p>
 
 ---
 
