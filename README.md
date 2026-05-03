@@ -30,6 +30,7 @@
   <b>Blockchain / Web3:</b> Smart Contracts • Solidity • DApps • TON (learning)
 
 </p>
+
 ---
 
 ## 📊 GitHub Overview
