@@ -1,210 +1,530 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="thebrainair — Fullstack Developer in progress">
+<title>thebrainair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
-  *{box-sizing:border-box;margin:0;padding:0}
-  .root{background:#09090b;border:1px solid #27272a;border-radius:12px;padding:32px;font-family:'JetBrains Mono',monospace;color:#fafafa}
-  .topbar{display:flex;align-items:center;gap:8px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid #27272a}
-  .dot{width:10px;height:10px;border-radius:50%}
-  .dot.r{background:#ef4444}.dot.y{background:#eab308}.dot.g{background:#22c55e}
-  .cmd-path{font-size:11px;color:#52525b;margin-left:6px}
-  .prompt-sym{color:#52525b;font-size:13px;user-select:none}
-  .section{margin-bottom:24px;opacity:0;transition:opacity 0.3s}
-  .section.visible{opacity:1}
-  .prompt-line{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}
-  .hero-name{font-size:22px;font-weight:700;color:#fafafa;letter-spacing:-0.5px}
-  .hero-sub{font-size:13px;color:#71717a;margin-top:3px}
-  .badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .badge{font-size:11px;padding:2px 8px;border:1px solid #27272a;border-radius:4px;color:#a1a1aa;background:#18181b}
-  .badge.green{border-color:#166534;color:#4ade80;background:#052e16}
-  .badge.blue{border-color:#1e3a5f;color:#60a5fa;background:#0c1a2e}
-  .badge.amber{border-color:#713f12;color:#fbbf24;background:#1c0f00}
-  .divider{border:none;border-top:1px solid #27272a;margin:20px 0;opacity:0;transition:opacity 0.3s}
-  .divider.visible{opacity:1}
-  .info-row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;font-size:12px;border-bottom:1px solid #18181b}
-  .info-key{color:#52525b;min-width:90px;flex-shrink:0}
-  .info-val{color:#d4d4d8}
-  .chip-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-  .chip{display:flex;align-items:center;gap:5px;background:#18181b;border:1px solid #27272a;border-radius:5px;padding:4px 9px;font-size:11px;color:#a1a1aa;transition:border-color .15s}
-  .chip:hover{border-color:#52525b}
-  .chip-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
-  .chip-dot.js{background:#eab308}.chip-dot.ts{background:#3b82f6}.chip-dot.py{background:#22c55e}.chip-dot.web3{background:#a855f7}.chip-dot.db{background:#f97316}.chip-dot.gray{background:#52525b}
-  .lang-chip{display:flex;align-items:center;gap:6px;background:#18181b;border:1px solid #27272a;border-radius:5px;padding:4px 9px;font-size:11px;color:#a1a1aa;transition:border-color .15s}
-  .lang-chip:hover{border-color:#52525b}
-  .lang-chip.dim{opacity:0.45}
-  .lbadge{font-size:9px;padding:1px 5px;border-radius:3px;border:1px solid}
-  .lbadge.native{border-color:#166534;color:#4ade80;background:#052e16}
-  .lbadge.fluent{border-color:#1e3a5f;color:#60a5fa;background:#0c1a2e}
-  .lbadge.learning{border-color:#713f12;color:#fbbf24;background:#1c0f00}
-  .lbadge.beginner{border-color:#3f3f46;color:#3f3f46;background:#09090b}
-  .link-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .link-btn{display:flex;align-items:center;gap:5px;font-size:11px;padding:5px 12px;border:1px solid #27272a;border-radius:5px;background:#18181b;color:#a1a1aa;text-decoration:none;font-family:inherit;cursor:pointer;transition:all .15s}
-  .link-btn:hover{border-color:#52525b;color:#fafafa}
-  .quote{border-left:2px solid #27272a;padding:8px 14px;color:#71717a;font-size:12px;font-style:italic}
-  .quote span{color:#fafafa}
-  .cursor{display:inline-block;width:8px;height:14px;background:#fafafa;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-left:1px}
-  .typing-cursor{display:inline-block;width:7px;height:12px;background:#52525b;vertical-align:text-bottom;margin-left:1px;animation:blink 1s step-end infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  .cmd-text{color:#52525b;font-size:12px}
-  .tag{font-size:10px;padding:1px 6px;border:1px solid #3f3f46;border-radius:3px;color:#52525b}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #09090b;
+    --surface: #18181b;
+    --border: #27272a;
+    --border-hover: #52525b;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --dim: #71717a;
+    --dimmer: #52525b;
+    --font: 'JetBrains Mono', 'Courier New', monospace;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ── DESKTOP BACKGROUND ── */
+  #desktop {
+    width: 100vw; height: 100vh;
+    position: relative;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(39,39,42,0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 20%, rgba(39,39,42,0.3) 0%, transparent 70%),
+      #09090b;
+    overflow: hidden;
+  }
+
+  /* subtle grid */
+  #desktop::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(39,39,42,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(39,39,42,0.5) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* ── WINDOW ── */
+  #window {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(680px, 92vw);
+    max-height: 88vh;
+    background: #09090b;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 32px 80px rgba(0,0,0,0.8),
+      0 8px 24px rgba(0,0,0,0.6);
+    user-select: none;
+    will-change: transform;
+    transition: box-shadow 0.2s;
+  }
+
+  #window.dragging {
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 48px 120px rgba(0,0,0,0.9),
+      0 16px 40px rgba(0,0,0,0.7);
+    cursor: grabbing;
+  }
+
+  /* ── TITLEBAR ── */
+  #titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+    cursor: grab;
+    flex-shrink: 0;
+    border-radius: 12px 12px 0 0;
+  }
+
+  #titlebar:active { cursor: grabbing; }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .dot.r { background: #ef4444; }
+  .dot.y { background: #eab308; }
+  .dot.g { background: #22c55e; }
+
+  .win-title {
+    font-size: 12px;
+    color: var(--dimmer);
+    margin-left: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  .win-title span { color: var(--muted); }
+
+  /* ── CONTENT ── */
+  #content {
+    padding: 24px 26px 28px;
+    overflow-y: auto;
+    flex: 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  #content::-webkit-scrollbar { width: 4px; }
+  #content::-webkit-scrollbar-track { background: transparent; }
+  #content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 22px; opacity: 0; transition: opacity 0.25s; }
+  .section.visible { opacity: 1; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; opacity: 0; transition: opacity 0.3s; }
+  .divider.visible { opacity: 1; }
+
+  .prompt-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
+  .prompt-sym { color: var(--dimmer); font-size: 13px; padding-top: 1px; flex-shrink: 0; }
+  .cmd-text { color: var(--dimmer); font-size: 12px; }
+  .typing-cursor {
+    display: inline-block; width: 7px; height: 13px;
+    background: var(--dimmer); vertical-align: text-bottom;
+    margin-left: 1px; animation: blink 1s step-end infinite;
+  }
+  .final-cursor {
+    display: inline-block; width: 8px; height: 14px;
+    background: var(--text); vertical-align: text-bottom;
+    margin-left: 2px; animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* WHOAMI */
+  .hero-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .hero-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .badge { font-size: 11px; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; color: var(--muted); background: var(--surface); }
+  .badge.green { border-color: #166534; color: #4ade80; background: #052e16; }
+  .badge.blue  { border-color: #1e3a5f; color: #60a5fa; background: #0c1a2e; }
+  .badge.amber { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
+
+  /* INFO ROWS */
+  .body-indent { margin-left: 16px; }
+  .info-row { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--surface); }
+  .info-key { color: var(--dimmer); min-width: 88px; flex-shrink: 0; }
+  .info-val { color: #d4d4d8; }
+
+  /* CHIPS */
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    display: flex; align-items: center; gap: 5px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 5px; padding: 4px 9px; font-size: 11px;
+    color: var(--muted); transition: border-color 0.15s;
+    font-family: var(--font);
+  }
+  .chip:hover { border-color: var(--border-hover); }
+  .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .js  { background: #eab308; }
+  .ts  { background: #3b82f6; }
+  .py  { background: #22c55e; }
+  .web3{ background: #a855f7; }
+  .db  { background: #f97316; }
+  .gr  { background: #52525b; }
+
+  .tag { font-size: 10px; padding: 1px 5px; border: 1px solid #3f3f46; border-radius: 3px; color: var(--dimmer); margin-left: 2px; }
+
+  /* LANG CHIPS */
+  .lang-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 5px; padding: 4px 9px; font-size: 11px;
+    color: var(--muted); transition: border-color 0.15s;
+    font-family: var(--font);
+  }
+  .lang-chip:hover { border-color: var(--border-hover); }
+  .lang-chip.dim { opacity: 0.42; }
+  .lbadge { font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 1px solid; }
+  .lbadge.native   { border-color: #166534; color: #4ade80; background: #052e16; }
+  .lbadge.fluent   { border-color: #1e3a5f; color: #60a5fa; background: #0c1a2e; }
+  .lbadge.learning { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
+  .lbadge.beginner { border-color: #3f3f46; color: #3f3f46; background: #09090b; }
+
+  /* LINKS */
+  .link-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .link-btn {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; padding: 5px 12px;
+    border: 1px solid var(--border); border-radius: 5px;
+    background: var(--surface); color: var(--muted);
+    text-decoration: none; font-family: var(--font);
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .link-btn:hover { border-color: var(--border-hover); color: var(--text); }
+
+  /* QUOTE */
+  .quote { border-left: 2px solid var(--border); padding: 8px 14px; color: var(--dim); font-size: 12px; font-style: italic; }
+  .quote span { color: var(--text); }
+
+  /* FINAL PROMPT */
+  #final-prompt { display: none; align-items: center; gap: 6px; margin-top: 20px; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    html, body { overflow: auto; }
+
+    #desktop {
+      height: auto; min-height: 100vh;
+      overflow-y: auto;
+      display: flex; align-items: flex-start; justify-content: center;
+      padding: 0 0 40px;
+    }
+
+    #desktop::before { display: none; }
+
+    #window {
+      position: static;
+      transform: none;
+      width: 100%;
+      max-height: none;
+      border-radius: 0;
+      border-left: none; border-right: none; border-top: none;
+      box-shadow: none;
+    }
+
+    #titlebar { cursor: default; }
+
+    #content {
+      overflow-y: visible;
+      padding: 20px 18px 28px;
+    }
+
+    .hero-name { font-size: 19px; }
+    .info-key { min-width: 76px; }
+  }
+
+  /* ── TASKBAR (desktop only) ── */
+  #taskbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: 42px;
+    background: rgba(9,9,11,0.85);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .taskbar-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 11px; color: var(--muted);
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    font-family: var(--font);
+  }
+  .taskbar-item:hover { border-color: var(--border-hover); color: var(--text); }
+  .taskbar-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+
+  .taskbar-clock { margin-left: auto; font-size: 11px; color: var(--dimmer); }
+
+  @media (max-width: 640px) {
+    #taskbar { display: none; }
+  }
 </style>
+</head>
+<body>
 
-<div class="root">
-  <div class="topbar">
-    <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-    <span class="cmd-path">~/thebrainair — npx profile@latest</span>
-  </div>
+<div id="desktop">
 
-  <div id="s0" class="section" style="opacity:1">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd0"></span><span class="typing-cursor" id="cur0"></span>
+  <div id="window">
+    <div id="titlebar">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <span class="win-title">~/thebrainair — <span>npx profile@latest</span></span>
     </div>
-    <div id="body0" style="margin-left:16px;padding:12px 0 4px;display:none">
-      <div class="hero-name">thebrainair</div>
-      <div class="hero-sub">Fullstack Developer in progress</div>
-      <div class="badge-row">
-        <span class="badge green">● available</span>
-        <span class="badge blue">co-founder @ $DARK</span>
-        <span class="badge amber">junior → mid</span>
+
+    <div id="content">
+
+      <div id="s0" class="section visible">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd0"></span><span class="typing-cursor" id="cur0"></span>
+        </div>
+        <div id="body0" class="body-indent" style="padding:10px 0 4px;display:none">
+          <div class="hero-name">thebrainair</div>
+          <div class="hero-sub">Fullstack Developer in progress</div>
+          <div class="badge-row">
+            <span class="badge green">● available</span>
+            <span class="badge blue">co-founder @ $DARK</span>
+            <span class="badge amber">junior → mid</span>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div id="d0" class="divider"></div>
+      <div id="d0" class="divider"></div>
 
-  <div id="s1" class="section">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd1"></span><span class="typing-cursor" id="cur1" style="display:none"></span>
-    </div>
-    <div id="body1" style="margin-left:16px;margin-top:10px;display:none">
-      <div class="info-row"><span class="info-key">status</span><span class="info-val">learning fullstack development</span></div>
-      <div class="info-row"><span class="info-key">frontend</span><span class="info-val">React · Tailwind · TypeScript</span></div>
-      <div class="info-row"><span class="info-key">backend</span><span class="info-val">Node.js · FastAPI · Flask</span></div>
-      <div class="info-row"><span class="info-key">interests</span><span class="info-val">Web Apps · Blockchain · Automation</span></div>
-      <div class="info-row"><span class="info-key">goal</span><span class="info-val">strong junior developer</span></div>
-      <div class="info-row"><span class="info-key">current</span><span class="info-val">co-founder / dev at $DARK</span></div>
-    </div>
-  </div>
-
-  <div id="d1" class="divider"></div>
-
-  <div id="s2" class="section">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd2"></span><span class="typing-cursor" id="cur2" style="display:none"></span>
-    </div>
-    <div id="body2" style="margin-left:16px;margin-top:10px;display:none">
-      <div class="chip-grid">
-        <div class="chip"><div class="chip-dot js"></div>JavaScript</div>
-        <div class="chip"><div class="chip-dot ts"></div>TypeScript</div>
-        <div class="chip"><div class="chip-dot js"></div>React</div>
-        <div class="chip"><div class="chip-dot ts"></div>Vite</div>
-        <div class="chip"><div class="chip-dot js"></div>Tailwind</div>
-        <div class="chip"><div class="chip-dot py"></div>Python</div>
-        <div class="chip"><div class="chip-dot py"></div>FastAPI</div>
-        <div class="chip"><div class="chip-dot js"></div>Node.js</div>
-        <div class="chip"><div class="chip-dot db"></div>PostgreSQL</div>
-        <div class="chip"><div class="chip-dot db"></div>Redis</div>
-        <div class="chip"><div class="chip-dot web3"></div>Solidity</div>
-        <div class="chip"><div class="chip-dot web3"></div>TON <span class="tag" style="margin-left:4px">wip</span></div>
-        <div class="chip"><div class="chip-dot gray"></div>Linux</div>
-        <div class="chip"><div class="chip-dot gray"></div>Git</div>
+      <div id="s1" class="section">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd1"></span><span class="typing-cursor" id="cur1" style="display:none"></span>
+        </div>
+        <div id="body1" class="body-indent" style="margin-top:8px;display:none">
+          <div class="info-row"><span class="info-key">status</span><span class="info-val">learning fullstack development</span></div>
+          <div class="info-row"><span class="info-key">frontend</span><span class="info-val">React · Tailwind · TypeScript</span></div>
+          <div class="info-row"><span class="info-key">backend</span><span class="info-val">Node.js · FastAPI · Flask</span></div>
+          <div class="info-row"><span class="info-key">interests</span><span class="info-val">Web Apps · Blockchain · Automation</span></div>
+          <div class="info-row"><span class="info-key">goal</span><span class="info-val">strong junior developer</span></div>
+          <div class="info-row"><span class="info-key">current</span><span class="info-val">co-founder / dev at $DARK</span></div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div id="d2" class="divider"></div>
+      <div id="d1" class="divider"></div>
 
-  <div id="s3" class="section">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd3"></span><span class="typing-cursor" id="cur3" style="display:none"></span>
-    </div>
-    <div id="body3" style="margin-left:16px;margin-top:10px;display:none">
-      <div class="chip-grid">
-        <div class="lang-chip"><span>🇬🇧</span> English <span class="lbadge fluent">fluent</span></div>
-        <div class="lang-chip"><span>🇷🇺</span> Russian <span class="lbadge native">native</span></div>
-        <div class="lang-chip"><span>🇦🇲</span> Armenian <span class="lbadge native">native</span></div>
-        <div class="lang-chip"><span>🇪🇸</span> Spanish <span class="lbadge learning">learning</span></div>
-        <div class="lang-chip dim"><span>🇫🇷</span> French <span class="lbadge beginner">beginner</span></div>
+      <div id="s2" class="section">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd2"></span><span class="typing-cursor" id="cur2" style="display:none"></span>
+        </div>
+        <div id="body2" class="body-indent" style="margin-top:8px;display:none">
+          <div class="chip-grid">
+            <div class="chip"><div class="chip-dot js"></div>JavaScript</div>
+            <div class="chip"><div class="chip-dot ts"></div>TypeScript</div>
+            <div class="chip"><div class="chip-dot js"></div>React</div>
+            <div class="chip"><div class="chip-dot ts"></div>Vite</div>
+            <div class="chip"><div class="chip-dot js"></div>Tailwind</div>
+            <div class="chip"><div class="chip-dot py"></div>Python</div>
+            <div class="chip"><div class="chip-dot py"></div>FastAPI</div>
+            <div class="chip"><div class="chip-dot js"></div>Node.js</div>
+            <div class="chip"><div class="chip-dot db"></div>PostgreSQL</div>
+            <div class="chip"><div class="chip-dot db"></div>Redis</div>
+            <div class="chip"><div class="chip-dot web3"></div>Solidity</div>
+            <div class="chip"><div class="chip-dot web3"></div>TON<span class="tag">wip</span></div>
+            <div class="chip"><div class="chip-dot gr"></div>Linux</div>
+            <div class="chip"><div class="chip-dot gr"></div>Git</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div id="d3" class="divider"></div>
+      <div id="d2" class="divider"></div>
 
-  <div id="s4" class="section">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd4"></span><span class="typing-cursor" id="cur4" style="display:none"></span>
-    </div>
-    <div id="body4" style="margin-left:16px;display:none">
-      <div class="link-row">
-        <a class="link-btn" href="https://t.me/thebraina1r">↗ Telegram</a>
-        <a class="link-btn" href="https://thebrainair.com">↗ Website</a>
-        <a class="link-btn" href="https://github.com/TheBrainAir">↗ GitHub</a>
+      <div id="s3" class="section">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd3"></span><span class="typing-cursor" id="cur3" style="display:none"></span>
+        </div>
+        <div id="body3" class="body-indent" style="margin-top:8px;display:none">
+          <div class="chip-grid">
+            <div class="lang-chip">🇬🇧 English <span class="lbadge fluent">fluent</span></div>
+            <div class="lang-chip">🇷🇺 Russian <span class="lbadge native">native</span></div>
+            <div class="lang-chip">🇦🇲 Armenian <span class="lbadge native">native</span></div>
+            <div class="lang-chip">🇪🇸 Spanish <span class="lbadge learning">learning</span></div>
+            <div class="lang-chip dim">🇫🇷 French <span class="lbadge beginner">beginner</span></div>
+          </div>
+        </div>
       </div>
+
+      <div id="d3" class="divider"></div>
+
+      <div id="s4" class="section">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd4"></span><span class="typing-cursor" id="cur4" style="display:none"></span>
+        </div>
+        <div id="body4" class="body-indent" style="margin-top:8px;display:none">
+          <div class="link-row">
+            <a class="link-btn" href="https://t.me/thebraina1r" target="_blank" rel="noopener">↗ Telegram</a>
+            <a class="link-btn" href="https://thebrainair.com" target="_blank" rel="noopener">↗ Website</a>
+            <a class="link-btn" href="https://github.com/TheBrainAir" target="_blank" rel="noopener">↗ GitHub</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="d4" class="divider"></div>
+
+      <div id="s5" class="section">
+        <div class="prompt-line">
+          <span class="prompt-sym">$</span>
+          <span class="cmd-text" id="cmd5"></span><span class="typing-cursor" id="cur5" style="display:none"></span>
+        </div>
+        <div id="body5" class="body-indent" style="margin-top:8px;display:none">
+          <div class="quote"><span>"I build things, break things, and then build them better."</span></div>
+        </div>
+      </div>
+
+      <div id="final-prompt">
+        <span class="prompt-sym">$</span><span class="final-cursor"></span>
+      </div>
+
     </div>
   </div>
 
-  <div id="d4" class="divider"></div>
+</div>
 
-  <div id="s5" class="section">
-    <div class="prompt-line">
-      <span class="prompt-sym">$</span>
-      <span class="cmd-text" id="cmd5"></span><span class="typing-cursor" id="cur5" style="display:none"></span>
-    </div>
-    <div id="body5" style="margin-left:16px;margin-top:8px;display:none">
-      <div class="quote"><span>"I build things, break things, and then build them better."</span></div>
-    </div>
+<!-- Desktop taskbar -->
+<div id="taskbar">
+  <div class="taskbar-item">
+    <div class="taskbar-dot"></div>
+    profile.terminal
   </div>
-
-  <div id="final-prompt" style="margin-top:20px;display:none;align-items:center;gap:6px">
-    <span class="prompt-sym">$</span><div class="cursor"></div>
-  </div>
+  <span class="taskbar-clock" id="clock"></span>
 </div>
 
 <script>
+// ── CLOCK ──
+function updateClock() {
+  const el = document.getElementById('clock');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ── DRAGGABLE WINDOW (desktop only) ──
+(function() {
+  const win = document.getElementById('window');
+  const bar = document.getElementById('titlebar');
+  let dragging = false, ox = 0, oy = 0;
+
+  function isMobile() { return window.innerWidth <= 640; }
+
+  bar.addEventListener('mousedown', (e) => {
+    if (isMobile()) return;
+    dragging = true;
+    const rect = win.getBoundingClientRect();
+    // Switch from centered transform to absolute positioning
+    if (win.style.transform !== 'none' && win.style.transform !== '') {
+      win.style.left = rect.left + 'px';
+      win.style.top = rect.top + 'px';
+      win.style.transform = 'none';
+    }
+    ox = e.clientX - win.getBoundingClientRect().left;
+    oy = e.clientY - win.getBoundingClientRect().top;
+    win.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (!dragging) return;
+    const x = e.clientX - ox;
+    const y = e.clientY - oy;
+    win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, x)) + 'px';
+    win.style.top = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, y)) + 'px';
+  });
+
+  document.addEventListener('mouseup', () => {
+    dragging = false;
+    win.classList.remove('dragging');
+  });
+
+  // Touch drag for future multi-window but not on mobile profile view
+  bar.addEventListener('touchstart', (e) => {
+    if (isMobile()) return;
+    const t = e.touches[0];
+    dragging = true;
+    const rect = win.getBoundingClientRect();
+    if (win.style.transform !== 'none' && win.style.transform !== '') {
+      win.style.left = rect.left + 'px';
+      win.style.top = rect.top + 'px';
+      win.style.transform = 'none';
+    }
+    ox = t.clientX - win.getBoundingClientRect().left;
+    oy = t.clientY - win.getBoundingClientRect().top;
+  }, { passive: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const t = e.touches[0];
+    win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, t.clientX - ox)) + 'px';
+    win.style.top = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, t.clientY - oy)) + 'px';
+  }, { passive: true });
+
+  document.addEventListener('touchend', () => { dragging = false; });
+})();
+
+// ── TERMINAL ANIMATION ──
 const steps = [
-  { cmdId:'cmd0', curId:'cur0', bodyId:'body0', divId:'d0', secId:'s0', cmd:'whoami' },
-  { cmdId:'cmd1', curId:'cur1', bodyId:'body1', divId:'d1', secId:'s1', cmd:'cat about.json' },
-  { cmdId:'cmd2', curId:'cur2', bodyId:'body2', divId:'d2', secId:'s2', cmd:'ls tech-stack/' },
-  { cmdId:'cmd3', curId:'cur3', bodyId:'body3', divId:'d3', secId:'s3', cmd:'cat languages.conf' },
-  { cmdId:'cmd4', curId:'cur4', bodyId:'body4', divId:'d4', secId:'s4', cmd:'curl links.sh' },
-  { cmdId:'cmd5', curId:'cur5', bodyId:'body5', divId:'d5', secId:'s5', cmd:'echo $MOTTO' },
+  { cmd: 'whoami',           cmdId: 'cmd0', curId: 'cur0', bodyId: 'body0', divId: 'd0', secId: 's0' },
+  { cmd: 'cat about.json',   cmdId: 'cmd1', curId: 'cur1', bodyId: 'body1', divId: 'd1', secId: 's1' },
+  { cmd: 'ls tech-stack/',   cmdId: 'cmd2', curId: 'cur2', bodyId: 'body2', divId: 'd2', secId: 's2' },
+  { cmd: 'cat languages.conf', cmdId: 'cmd3', curId: 'cur3', bodyId: 'body3', divId: 'd3', secId: 's3' },
+  { cmd: 'curl links.sh',    cmdId: 'cmd4', curId: 'cur4', bodyId: 'body4', divId: 'd4', secId: 's4' },
+  { cmd: 'echo $MOTTO',      cmdId: 'cmd5', curId: 'cur5', bodyId: 'body5', divId: null,  secId: 's5' },
 ];
 
-function typeCmd(text, el, curEl, done) {
+function typeCmd(text, cmdEl, curEl, done) {
   curEl.style.display = 'inline-block';
   let i = 0;
+  const speed = 36;
   const iv = setInterval(() => {
-    el.textContent += text[i];
-    i++;
+    cmdEl.textContent += text[i++];
     if (i >= text.length) {
       clearInterval(iv);
       curEl.style.display = 'none';
       done();
     }
-  }, 38);
+  }, speed);
 }
 
-function showBody(id, done) {
-  const el = document.getElementById(id);
-  el.style.display = 'block';
+function fadeIn(el, display = 'block') {
+  el.style.display = display;
   el.style.opacity = '0';
-  el.style.transition = 'opacity 0.25s';
-  setTimeout(() => { el.style.opacity = '1'; done(); }, 30);
-}
-
-function showDiv(id) {
-  const el = document.getElementById(id);
-  if (el) { el.style.opacity='0'; el.style.transition='opacity 0.3s'; el.classList.add('visible'); setTimeout(()=>el.style.opacity='1',30); }
-}
-
-function showSec(id) {
-  const el = document.getElementById(id);
-  if (el) { el.classList.add('visible'); }
+  requestAnimationFrame(() => {
+    el.style.transition = 'opacity 0.25s';
+    el.style.opacity = '1';
+  });
 }
 
 function runStep(i) {
@@ -213,30 +533,33 @@ function runStep(i) {
     fp.style.display = 'flex';
     return;
   }
-  const s = steps[i];
-  if (i > 0) {
-    showDiv(steps[i-1].divId);
-    setTimeout(() => {
-      showSec(s.secId);
-      setTimeout(() => doType(i), 100);
-    }, 350);
-  } else {
-    doType(i);
-  }
-}
 
-function doType(i) {
   const s = steps[i];
-  const cmdEl = document.getElementById(s.cmdId);
+  const sec = document.getElementById(s.secId);
   const curEl = document.getElementById(s.curId);
+  const cmdEl = document.getElementById(s.cmdId);
+
+  // show section
+  sec.classList.add('visible');
+  curEl.style.display = 'inline-block';
+
+  // show previous divider
+  if (i > 0 && steps[i-1].divId) {
+    const prevDiv = document.getElementById(steps[i-1].divId);
+    if (prevDiv) prevDiv.classList.add('visible');
+  }
+
   typeCmd(s.cmd, cmdEl, curEl, () => {
     setTimeout(() => {
-      showBody(s.bodyId, () => {
-        setTimeout(() => runStep(i+1), 400);
-      });
-    }, 180);
+      const body = document.getElementById(s.bodyId);
+      fadeIn(body);
+      setTimeout(() => runStep(i + 1), 420);
+    }, 150);
   });
 }
 
-setTimeout(() => runStep(0), 300);
+// stagger start slightly
+setTimeout(() => runStep(0), 400);
 </script>
+</body>
+</html>
