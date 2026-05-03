@@ -24,8 +24,6 @@
   <img src="https://skillicons.dev/icons?i=js,ts,react,vite,html,css,tailwind,nodejs,python,git,linux,postgresql,redis" />
 </p>
 
----
-
 <p align="center">
   <a href="https://ton.org/">
     <img src="https://img.shields.io/badge/TON-0098EA?style=for-the-badge&logo=ton&logoColor=white" alt="TON" />
