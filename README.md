@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=220&section=header&text=TheBrainAir&fontSize=45&fontColor=ffffff&animation=twinkling" />
-</p>
 <h1 align="center">Hi 👋, I'm Yuri</h1>
 <h3 align="center">Fullstack Developer in progress 🚀</h3>
 
