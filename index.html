@@ -42,7 +42,6 @@
     overflow: hidden;
   }
 
-  /* subtle grid */
   #desktop::before {
     content: '';
     position: absolute; inset: 0;
@@ -53,13 +52,9 @@
     pointer-events: none;
   }
 
-  /* ── WINDOW ── */
-  #window {
+  /* ── WINDOWS (Generic) ── */
+  .window {
     position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: min(680px, 92vw);
-    max-height: 88vh;
     background: #09090b;
     border: 1px solid var(--border);
     border-radius: 12px;
@@ -70,20 +65,29 @@
       0 32px 80px rgba(0,0,0,0.8),
       0 8px 24px rgba(0,0,0,0.6);
     user-select: none;
-    will-change: transform;
+    will-change: transform, left, top;
     transition: box-shadow 0.2s;
   }
 
-  #window.dragging {
+  /* Main Window specifics */
+  #window-main {
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(680px, 92vw);
+    max-height: 88vh;
+    z-index: 1;
+  }
+
+  .window.dragging {
     box-shadow:
       0 0 0 1px rgba(255,255,255,0.06),
       0 48px 120px rgba(0,0,0,0.9),
       0 16px 40px rgba(0,0,0,0.7);
-    cursor: grabbing;
+    cursor: grabbing !important;
   }
 
   /* ── TITLEBAR ── */
-  #titlebar {
+  .titlebar {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -92,12 +96,14 @@
     cursor: grab;
     flex-shrink: 0;
     border-radius: 12px 12px 0 0;
+    background: #09090b;
   }
 
-  #titlebar:active { cursor: grabbing; }
+  .titlebar:active { cursor: grabbing; }
 
-  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-  .dot.r { background: #ef4444; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; transition: filter 0.2s; }
+  .dot.r { background: #ef4444; cursor: pointer; }
+  .dot.r:hover { filter: brightness(1.3); }
   .dot.y { background: #eab308; }
   .dot.g { background: #22c55e; }
 
@@ -106,29 +112,27 @@
     color: var(--dimmer);
     margin-left: 6px;
     letter-spacing: 0.02em;
+    pointer-events: none;
   }
-
   .win-title span { color: var(--muted); }
 
   /* ── CONTENT ── */
-  #content {
+  .content {
     padding: 24px 26px 28px;
     overflow-y: auto;
     flex: 1;
     scrollbar-width: thin;
     scrollbar-color: var(--border) transparent;
   }
+  .content::-webkit-scrollbar { width: 4px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-  #content::-webkit-scrollbar { width: 4px; }
-  #content::-webkit-scrollbar-track { background: transparent; }
-  #content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  /* ── SECTIONS ── */
+  /* ── SECTIONS & STYLES (from your original code) ── */
   .section { margin-bottom: 22px; opacity: 0; transition: opacity 0.25s; }
   .section.visible { opacity: 1; }
   .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; opacity: 0; transition: opacity 0.3s; }
   .divider.visible { opacity: 1; }
-
   .prompt-line { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; }
   .prompt-sym { color: var(--dimmer); font-size: 13px; padding-top: 1px; flex-shrink: 0; }
   .cmd-text { color: var(--dimmer); font-size: 12px; }
@@ -142,10 +146,8 @@
     background: var(--text); vertical-align: text-bottom;
     margin-left: 2px; animation: blink 1s step-end infinite;
   }
-
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-  /* WHOAMI */
   .hero-name { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
   .hero-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
   .badge-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -154,41 +156,25 @@
   .badge.blue  { border-color: #1e3a5f; color: #60a5fa; background: #0c1a2e; }
   .badge.amber { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
 
-  /* INFO ROWS */
   .body-indent { margin-left: 16px; }
   .info-row { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; font-size: 12px; border-bottom: 1px solid var(--surface); }
   .info-key { color: var(--dimmer); min-width: 88px; flex-shrink: 0; }
   .info-val { color: #d4d4d8; }
 
-  /* CHIPS */
   .chip-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-  .chip {
+  .chip, .lang-chip {
     display: flex; align-items: center; gap: 5px;
     background: var(--surface); border: 1px solid var(--border);
     border-radius: 5px; padding: 4px 9px; font-size: 11px;
     color: var(--muted); transition: border-color 0.15s;
     font-family: var(--font);
   }
-  .chip:hover { border-color: var(--border-hover); }
+  .chip:hover, .lang-chip:hover { border-color: var(--border-hover); }
   .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .js  { background: #eab308; }
-  .ts  { background: #3b82f6; }
-  .py  { background: #22c55e; }
-  .web3{ background: #a855f7; }
-  .db  { background: #f97316; }
-  .gr  { background: #52525b; }
-
+  .js  { background: #eab308; } .ts  { background: #3b82f6; } .py  { background: #22c55e; }
+  .web3{ background: #a855f7; } .db  { background: #f97316; } .gr  { background: #52525b; }
   .tag { font-size: 10px; padding: 1px 5px; border: 1px solid #3f3f46; border-radius: 3px; color: var(--dimmer); margin-left: 2px; }
-
-  /* LANG CHIPS */
-  .lang-chip {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 5px; padding: 4px 9px; font-size: 11px;
-    color: var(--muted); transition: border-color 0.15s;
-    font-family: var(--font);
-  }
-  .lang-chip:hover { border-color: var(--border-hover); }
+  
   .lang-chip.dim { opacity: 0.42; }
   .lbadge { font-size: 9px; padding: 1px 5px; border-radius: 3px; border: 1px solid; }
   .lbadge.native   { border-color: #166534; color: #4ade80; background: #052e16; }
@@ -196,7 +182,6 @@
   .lbadge.learning { border-color: #713f12; color: #fbbf24; background: #1c0f00; }
   .lbadge.beginner { border-color: #3f3f46; color: #3f3f46; background: #09090b; }
 
-  /* LINKS */
   .link-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .link-btn {
     display: flex; align-items: center; gap: 5px;
@@ -208,48 +193,11 @@
   }
   .link-btn:hover { border-color: var(--border-hover); color: var(--text); }
 
-  /* QUOTE */
   .quote { border-left: 2px solid var(--border); padding: 8px 14px; color: var(--dim); font-size: 12px; font-style: italic; }
   .quote span { color: var(--text); }
-
-  /* FINAL PROMPT */
   #final-prompt { display: none; align-items: center; gap: 6px; margin-top: 20px; }
 
-  /* ── MOBILE ── */
-  @media (max-width: 640px) {
-    html, body { overflow: auto; }
-
-    #desktop {
-      height: auto; min-height: 100vh;
-      overflow-y: auto;
-      display: flex; align-items: flex-start; justify-content: center;
-      padding: 0 0 40px;
-    }
-
-    #desktop::before { display: none; }
-
-    #window {
-      position: static;
-      transform: none;
-      width: 100%;
-      max-height: none;
-      border-radius: 0;
-      border-left: none; border-right: none; border-top: none;
-      box-shadow: none;
-    }
-
-    #titlebar { cursor: default; }
-
-    #content {
-      overflow-y: visible;
-      padding: 20px 18px 28px;
-    }
-
-    .hero-name { font-size: 19px; }
-    .info-key { min-width: 76px; }
-  }
-
-  /* ── TASKBAR (desktop only) ── */
+  /* ── TASKBAR & START MENU ── */
   #taskbar {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: 42px;
@@ -259,27 +207,104 @@
     display: flex; align-items: center;
     padding: 0 20px;
     gap: 12px;
-    z-index: 10;
+    z-index: 1000;
   }
 
   .taskbar-item {
-    display: flex; align-items: center; gap: 7px;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
     font-size: 11px; color: var(--muted);
     padding: 4px 10px;
     border: 1px solid var(--border);
     border-radius: 5px;
     background: var(--surface);
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
     font-family: var(--font);
+    height: 26px;
   }
-  .taskbar-item:hover { border-color: var(--border-hover); color: var(--text); }
+  .taskbar-item:hover { border-color: var(--border-hover); color: var(--text); background: var(--border); }
   .taskbar-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
-
   .taskbar-clock { margin-left: auto; font-size: 11px; color: var(--dimmer); }
 
+  #btn-plus { font-size: 16px; font-weight: bold; width: 32px; padding: 0; }
+
+  #start-menu {
+    position: fixed;
+    bottom: 50px;
+    left: 20px;
+    background: rgba(24, 24, 27, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px);
+    transition: 0.2s ease;
+    z-index: 999;
+  }
+  #start-menu.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+  .menu-item {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.15s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .menu-item:hover { background: var(--border); color: var(--text); }
+
+  /* ── EASTER EGG WINDOWS ── */
+  .hidden { display: none !important; }
+
+  #window-neofetch {
+    top: 10%; left: 10%;
+    width: 480px;
+    z-index: 2;
+  }
+
+  .neofetch-grid { display: flex; gap: 20px; font-size: 12px; align-items: center;}
+  .ascii-art { color: #60a5fa; font-weight: bold; line-height: 1.2; }
+  .neo-info p { margin-bottom: 4px; color: #d4d4d8; }
+  .neo-info span.lbl { color: #a1a1aa; font-weight: bold; margin-right: 8px; }
+  .color-blocks { display: flex; gap: 4px; margin-top: 10px; }
+  .cb { width: 16px; height: 16px; border-radius: 2px; }
+  .cb.c1 { background: #ef4444; } .cb.c2 { background: #22c55e; }
+  .cb.c3 { background: #eab308; } .cb.c4 { background: #3b82f6; }
+  .cb.c5 { background: #a855f7; } .cb.c6 { background: #f97316; }
+
+  #window-dvd {
+    top: 20%; left: 40%;
+    width: 300px; height: 250px;
+    z-index: 3;
+  }
+  #dvd-container {
+    position: relative; width: 100%; height: 100%;
+    background: #000; overflow: hidden;
+    border-radius: 0 0 12px 12px;
+  }
+  #dvd-logo {
+    position: absolute;
+    font-size: 20px; font-weight: bold;
+    color: #ef4444; text-shadow: 0 0 10px currentColor;
+    white-space: nowrap; user-select: none;
+  }
+
+  /* ── MOBILE ── */
   @media (max-width: 640px) {
+    html, body { overflow: auto; }
+    #desktop { height: auto; min-height: 100vh; overflow-y: auto; display: flex; align-items: flex-start; justify-content: center; padding: 0 0 40px; }
+    #desktop::before { display: none; }
+    .window { position: static; transform: none; width: 100%; max-height: none; border-radius: 0; border-left: none; border-right: none; border-top: none; box-shadow: none; margin-bottom: 20px;}
+    .titlebar { cursor: default; }
+    .content { overflow-y: visible; padding: 20px 18px 28px; }
     #taskbar { display: none; }
+    #start-menu { display: none; }
   }
 </style>
 </head>
@@ -287,16 +312,15 @@
 
 <div id="desktop">
 
-  <div id="window">
-    <div id="titlebar">
+  <div id="window-main" class="window">
+    <div class="titlebar">
       <div class="dot r"></div>
       <div class="dot y"></div>
       <div class="dot g"></div>
       <span class="win-title">~/thebrainair — <span>npx profile@latest</span></span>
     </div>
 
-    <div id="content">
-
+    <div class="content" id="main-content">
       <div id="s0" class="section visible">
         <div class="prompt-line">
           <span class="prompt-sym">$</span>
@@ -410,11 +434,59 @@
     </div>
   </div>
 
+  <div id="window-neofetch" class="window hidden">
+    <div class="titlebar">
+      <div class="dot r" title="Close"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <span class="win-title">~/thebrainair — <span>neofetch</span></span>
+    </div>
+    <div class="content">
+      <div class="neofetch-grid">
+        <pre class="ascii-art">
+    |\__/,|   (`\
+  _.|o o  |_   ) )
+ -(((---(((--------
+        </pre>
+        <div class="neo-info">
+          <p><span style="color:#60a5fa;font-weight:bold;">guest</span>@<span style="color:#60a5fa;font-weight:bold;">thebrainair</span></p>
+          <p>-------------------</p>
+          <p><span class="lbl">OS:</span> WebOS 3.1</p>
+          <p><span class="lbl">Host:</span> Browser Engine</p>
+          <p><span class="lbl">Uptime:</span> <span id="neo-uptime">0 mins</span></p>
+          <p><span class="lbl">Shell:</span> bash-like</p>
+          <p><span class="lbl">Theme:</span> Dark Matter</p>
+          <div class="color-blocks">
+            <div class="cb c1"></div><div class="cb c2"></div><div class="cb c3"></div>
+            <div class="cb c4"></div><div class="cb c5"></div><div class="cb c6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="window-dvd" class="window hidden">
+    <div class="titlebar">
+      <div class="dot r" title="Close"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+      <span class="win-title">~/easter-eggs — <span>dvd.sh</span></span>
+    </div>
+    <div id="dvd-container">
+      <div id="dvd-logo">thebrainair</div>
+    </div>
+  </div>
+
 </div>
 
-<!-- Desktop taskbar -->
+<div id="start-menu">
+  <div class="menu-item" onclick="openWindow('window-neofetch')">🐈 neofetch</div>
+  <div class="menu-item" onclick="openWindow('window-dvd')">💿 screensaver</div>
+</div>
+
 <div id="taskbar">
-  <div class="taskbar-item">
+  <div class="taskbar-item" id="btn-plus">+</div>
+  <div class="taskbar-item" onclick="openWindow('window-main')">
     <div class="taskbar-dot"></div>
     profile.terminal
   </div>
@@ -422,77 +494,138 @@
 </div>
 
 <script>
-// ── CLOCK ──
+// ── CLOCK & UPTIME ──
+const startTime = Date.now();
 function updateClock() {
   const el = document.getElementById('clock');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const upEl = document.getElementById('neo-uptime');
+  if (el) el.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  if (upEl) {
+    const mins = Math.floor((Date.now() - startTime) / 60000);
+    upEl.textContent = `${mins} mins`;
+  }
 }
 updateClock();
 setInterval(updateClock, 1000);
 
-// ── DRAGGABLE WINDOW (desktop only) ──
+// ── MULTI-WINDOW DRAG LOGIC (Fixed) ──
 (function() {
-  const win = document.getElementById('window');
-  const bar = document.getElementById('titlebar');
-  let dragging = false, ox = 0, oy = 0;
+  let activeWin = null;
+  let ox = 0, oy = 0;
+  let highestZ = 10;
+  const isMobile = () => window.innerWidth <= 640;
 
-  function isMobile() { return window.innerWidth <= 640; }
+  document.querySelectorAll('.window').forEach(win => {
+    const bar = win.querySelector('.titlebar');
+    const closeBtn = win.querySelector('.dot.r');
+    
+    // Bring to front on click
+    win.addEventListener('mousedown', () => {
+      win.style.zIndex = ++highestZ;
+    });
 
-  bar.addEventListener('mousedown', (e) => {
-    if (isMobile()) return;
-    dragging = true;
-    const rect = win.getBoundingClientRect();
-    // Switch from centered transform to absolute positioning
-    if (win.style.transform !== 'none' && win.style.transform !== '') {
-      win.style.left = rect.left + 'px';
-      win.style.top = rect.top + 'px';
-      win.style.transform = 'none';
+    // Close button logic
+    if (closeBtn && win.id !== 'window-main') {
+      closeBtn.addEventListener('click', () => {
+        win.classList.add('hidden');
+      });
     }
-    ox = e.clientX - win.getBoundingClientRect().left;
-    oy = e.clientY - win.getBoundingClientRect().top;
-    win.classList.add('dragging');
-    e.preventDefault();
+
+    let isFirstDrag = true;
+
+    if (bar) {
+      bar.addEventListener('mousedown', (e) => {
+        if (isMobile()) return;
+        activeWin = win;
+        win.style.zIndex = ++highestZ;
+        
+        // FIX: use getComputedStyle instead of inline style check
+        const computedTransform = window.getComputedStyle(win).transform;
+        if (isFirstDrag || computedTransform !== 'none') {
+          const rect = win.getBoundingClientRect();
+          win.style.left = rect.left + 'px';
+          win.style.top = rect.top + 'px';
+          win.style.transform = 'none';
+          isFirstDrag = false;
+        }
+
+        ox = e.clientX - win.getBoundingClientRect().left;
+        oy = e.clientY - win.getBoundingClientRect().top;
+        win.classList.add('dragging');
+        e.preventDefault();
+      });
+    }
   });
 
   document.addEventListener('mousemove', (e) => {
-    if (!dragging) return;
+    if (!activeWin) return;
     const x = e.clientX - ox;
     const y = e.clientY - oy;
-    win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, x)) + 'px';
-    win.style.top = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, y)) + 'px';
+    activeWin.style.left = Math.max(0, Math.min(window.innerWidth - activeWin.offsetWidth, x)) + 'px';
+    activeWin.style.top = Math.max(0, Math.min(window.innerHeight - activeWin.offsetHeight, y)) + 'px';
   });
 
   document.addEventListener('mouseup', () => {
-    dragging = false;
-    win.classList.remove('dragging');
+    if (activeWin) activeWin.classList.remove('dragging');
+    activeWin = null;
   });
-
-  // Touch drag for future multi-window but not on mobile profile view
-  bar.addEventListener('touchstart', (e) => {
-    if (isMobile()) return;
-    const t = e.touches[0];
-    dragging = true;
-    const rect = win.getBoundingClientRect();
-    if (win.style.transform !== 'none' && win.style.transform !== '') {
-      win.style.left = rect.left + 'px';
-      win.style.top = rect.top + 'px';
-      win.style.transform = 'none';
-    }
-    ox = t.clientX - win.getBoundingClientRect().left;
-    oy = t.clientY - win.getBoundingClientRect().top;
-  }, { passive: true });
-
-  document.addEventListener('touchmove', (e) => {
-    if (!dragging) return;
-    const t = e.touches[0];
-    win.style.left = Math.max(0, Math.min(window.innerWidth - win.offsetWidth, t.clientX - ox)) + 'px';
-    win.style.top = Math.max(0, Math.min(window.innerHeight - win.offsetHeight, t.clientY - oy)) + 'px';
-  }, { passive: true });
-
-  document.addEventListener('touchend', () => { dragging = false; });
 })();
+
+// ── START MENU & OPENING WINDOWS ──
+const plusBtn = document.getElementById('btn-plus');
+const startMenu = document.getElementById('start-menu');
+
+plusBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  startMenu.classList.toggle('visible');
+});
+
+document.addEventListener('click', () => {
+  startMenu.classList.remove('visible');
+});
+
+window.openWindow = function(id) {
+  const win = document.getElementById(id);
+  if (win) {
+    win.classList.remove('hidden');
+    // Simulate mousedown to bring to front
+    const event = new MouseEvent('mousedown');
+    win.dispatchEvent(event);
+  }
+};
+
+// ── DVD BOUNCER LOGIC ──
+const dvdLogo = document.getElementById('dvd-logo');
+const dvdCont = document.getElementById('dvd-container');
+let dx = 2, dy = 2, x = 10, y = 10;
+const colors = ['#ef4444', '#22c55e', '#eab308', '#3b82f6', '#a855f7', '#f97316'];
+let colorIdx = 0;
+
+function animateDVD() {
+  if (!document.getElementById('window-dvd').classList.contains('hidden')) {
+    const cw = dvdCont.clientWidth;
+    const ch = dvdCont.clientHeight;
+    const lw = dvdLogo.clientWidth;
+    const lh = dvdLogo.clientHeight;
+
+    x += dx; y += dy;
+
+    if (x + lw >= cw || x <= 0) {
+      dx = -dx;
+      colorIdx = (colorIdx + 1) % colors.length;
+      dvdLogo.style.color = colors[colorIdx];
+    }
+    if (y + lh >= ch || y <= 0) {
+      dy = -dy;
+      colorIdx = (colorIdx + 1) % colors.length;
+      dvdLogo.style.color = colors[colorIdx];
+    }
+
+    dvdLogo.style.transform = `translate(${x}px, ${y}px)`;
+  }
+  requestAnimationFrame(animateDVD);
+}
+requestAnimationFrame(animateDVD);
 
 // ── TERMINAL ANIMATION ──
 const steps = [
@@ -531,6 +664,9 @@ function runStep(i) {
   if (i >= steps.length) {
     const fp = document.getElementById('final-prompt');
     fp.style.display = 'flex';
+    // Scroll down to the prompt
+    const mainContent = document.getElementById('main-content');
+    mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
     return;
   }
 
@@ -539,11 +675,9 @@ function runStep(i) {
   const curEl = document.getElementById(s.curId);
   const cmdEl = document.getElementById(s.cmdId);
 
-  // show section
   sec.classList.add('visible');
   curEl.style.display = 'inline-block';
 
-  // show previous divider
   if (i > 0 && steps[i-1].divId) {
     const prevDiv = document.getElementById(steps[i-1].divId);
     if (prevDiv) prevDiv.classList.add('visible');
@@ -553,12 +687,13 @@ function runStep(i) {
     setTimeout(() => {
       const body = document.getElementById(s.bodyId);
       fadeIn(body);
+      const mainContent = document.getElementById('main-content');
+      mainContent.scrollTo({ top: mainContent.scrollHeight, behavior: 'smooth' });
       setTimeout(() => runStep(i + 1), 420);
     }, 150);
   });
 }
 
-// stagger start slightly
 setTimeout(() => runStep(0), 400);
 </script>
 </body>
