@@ -62,21 +62,14 @@
     <img src="https://img.shields.io/badge/Telegram-000?style=for-the-badge&logo=telegram" />
   </a>
 
-  <a href="https://thebrainair.com">
-    <img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=google-chrome" />
+  <a href="https://thebrainair.app">
+    <img src="https://img.shields.io/badge/Website-000?style=for-the-badge&logo=safari" />
   </a>
 
   <a href="https://www.linkedin.com/in/yuri-sargsyan">
     <img src="https://img.shields.io/badge/LinkedIn-000?style=for-the-badge&logo=linkedin" />
   </a>
 </p>
-
----
-
-## ⚡ Current Status
-
-> Co-Founder & Developer at $DARK  
-> Building experimental Web3 / blockchain products.
 
 ---
 
