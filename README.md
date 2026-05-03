@@ -20,9 +20,16 @@
 ## 🚀 Tech Stack
 
 <p align="center">
+
   <img src="https://skillicons.dev/icons?i=js,ts,react,html,css,tailwind,nodejs,python,flask,git,github,linux" />
+
 </p>
 
+<p align="center">
+
+  <b>Blockchain / Web3:</b> Smart Contracts • Solidity • DApps • TON (learning)
+
+</p>
 ---
 
 ## 📊 GitHub Overview
