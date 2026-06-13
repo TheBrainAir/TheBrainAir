@@ -1,5 +1,4 @@
 <h1 align="center">Hi 👋, I'm Yuri</h1>
-<h3 align="center">Fullstack Developer in progress 🚀</h3>
 
 <p align="center">
   <img src="https://komarev.com/ghpvc/?username=TheBrainAir&label=Profile%20views&color=0e75b6&style=flat" />
@@ -9,11 +8,10 @@
 
 ## 🧠 About Me
 
-- I’m currently learning **Fullstack Development**
+- I’m currently **Fullstack Developer**
 - Focus: **React, Tailwind, TypeScript**
 - Backend: **Node.js / FastAPI**
 - Interested in **Web Apps, Blockchain, Automation**
-- Goal: Become a strong **Junior Developer**
 - Currently: **Co-Founder / Dev at $DARK**
 
 ---
