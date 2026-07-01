@@ -1,4 +1,4 @@
-<h1 align="center">Hi 👋, I'm Yuri</h1>
+<h1 align="center">👋, I'm Yuri</h1>
 
 <p align="center">
   <picture>
@@ -8,9 +8,8 @@
   </picture>
 </p>
 
----
 
-## 🌐 Connect with Me
+## Contact
 
 <p align="center">
   <a href="https://t.me/thebraina1r">
