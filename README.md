@@ -1,14 +1,6 @@
 <h1 align="center">Hi 👋, I'm Yuri</h1>
 
 <p align="center">
-  <img src="https://komarev.com/ghpvc/?username=TheBrainAir&label=Profile%20views&color=0e75b6&style=flat" />
-</p>
-
----
-
-## 🐍 Contribution Snake
-
-<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake-dark.svg" />
     <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/TheBrainAir/TheBrainAir/output/snake.svg" />
